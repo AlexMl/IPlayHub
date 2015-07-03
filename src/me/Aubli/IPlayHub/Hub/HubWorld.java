@@ -7,6 +7,7 @@ import java.util.List;
 import me.Aubli.IPlayHub.IPlayHub;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -69,6 +70,10 @@ public class HubWorld {
 	return loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
     }
     
+    public World getWorld() {
+	return getConfig().getWorld();
+    }
+    
     public Location getSpawnLocation() {
 	return this.hubSpawn.clone();
     }
@@ -79,6 +84,10 @@ public class HubWorld {
     
     public HubConfig getConfig() {
 	return this.config;
+    }
+    
+    public boolean isEnabled() {
+	return getConfig().isEnabled();
     }
     
     public boolean addTeleportPoint(Location location) {
