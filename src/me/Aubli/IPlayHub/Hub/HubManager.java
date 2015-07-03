@@ -32,7 +32,13 @@ public class HubManager {
 	if (config.get("worlds") != null) {
 	    
 	    for (String worlds : config.getConfigurationSection("worlds").getKeys(false)) {
-		System.out.println(worlds);
+		try {
+		    HubWorld hubWorld = new HubWorld(config.getConfigurationSection("worlds." + worlds));
+		    this.hubList.add(hubWorld);
+		} catch (Exception e) {
+		    // TODO logger
+		    e.printStackTrace();
+		}
 	    }
 	    
 	}
@@ -56,16 +62,16 @@ public class HubManager {
 	FileConfiguration config = YamlConfiguration.loadConfiguration(IPlayHub.getHub().getWorldFile());
 	
 	if (config.get("worlds." + world.getName()) == null) {
-	    config.set("worlds." + world.getName(), null);
+	    ConfigurationSection section = config.createSection("worlds." + world.getName());
 	    config.save(IPlayHub.getHub().getWorldFile());
-	    return config.getConfigurationSection("worlds." + world.getName());
+	    return section;
 	} else {
 	    // TODO logger
-	    throw new Exception();
+	    throw new Exception("Only one hub per World");
 	}
     }
     
-    public HubManager getManager() {
+    public static HubManager getManager() {
 	return instance;
     }
     
