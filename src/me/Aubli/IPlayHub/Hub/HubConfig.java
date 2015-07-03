@@ -4,12 +4,12 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.configuration.MemorySection;
+import org.bukkit.configuration.ConfigurationSection;
 
 
 public class HubConfig {
     
-    private MemorySection configSection;
+    private ConfigurationSection configSection;
     
     private boolean enabled;			// Enable hub in world
     private World world;			// World settings apply to
@@ -19,7 +19,7 @@ public class HubConfig {
     private boolean weatherChanges;		// Enable weather change in world
     private boolean shootFireworks;		// shoot fireworks on join
     
-    public HubConfig(World world, MemorySection configSection) {
+    public HubConfig(World world, ConfigurationSection configSection) {
 	
 	this.configSection = configSection;
 	this.world = world;
@@ -32,7 +32,7 @@ public class HubConfig {
 	}
     }
     
-    public HubConfig(MemorySection configSection) throws Exception {
+    public HubConfig(ConfigurationSection configSection) throws Exception {
 	if (configSection.get("enabled") != null) {
 	    this.configSection = configSection;
 	    loadSettings(configSection);
@@ -49,7 +49,7 @@ public class HubConfig {
 	this.shootFireworks = true;
     }
     
-    private void loadSettings(MemorySection config) {
+    private void loadSettings(ConfigurationSection config) {
 	this.enabled = config.getBoolean("enabled");
 	this.world = Bukkit.getWorld(UUID.fromString(config.getString("world")));
 	
@@ -59,7 +59,7 @@ public class HubConfig {
 	// TODO fireworks
     }
     
-    private void saveSettings(MemorySection config) {
+    private void saveSettings(ConfigurationSection config) {
 	config.set("enabled", isEnabled());
 	config.set("world", getWorld().getUID().toString());
 	
@@ -73,7 +73,7 @@ public class HubConfig {
 	return this.world;
     }
     
-    public MemorySection getConfigSection() {
+    public ConfigurationSection getConfigSection() {
 	return this.configSection;
     }
     
