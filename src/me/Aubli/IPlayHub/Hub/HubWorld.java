@@ -22,6 +22,7 @@ public class HubWorld {
     public HubWorld(HubConfig config, Location spawnLoc) {
 	this.config = config;
 	this.hubSpawn = spawnLoc.clone();
+	this.teleportLocations = new ArrayList<Location>();
 	saveConfig();
     }
     
