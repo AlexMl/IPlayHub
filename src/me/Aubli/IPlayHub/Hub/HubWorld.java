@@ -12,8 +12,9 @@ public class HubWorld {
     private Location hubSpawn;
     private List<Location> teleportLocations;
     
-    public HubWorld(HubConfig config) {
+    public HubWorld(HubConfig config, Location spawnLoc) {
 	this.config = config;
+	this.hubSpawn = spawnLoc.clone();
     }
     
     // TODO setter/getter & save/load
