@@ -35,14 +35,11 @@ public class HubWorld {
     private void loadConfig() {
 	ConfigurationSection config = getConfig().getConfigSection();
 	
-	String[] locationString = config.getString("location.spawn").split(",");
-	this.hubSpawn = new Location(getConfig().getWorld(), Integer.parseInt(locationString[0]), Integer.parseInt(locationString[1]), Integer.parseInt(locationString[2]));
+	this.hubSpawn = parseLocation(config.getString("location.spawn"));
 	
 	this.teleportLocations = new ArrayList<Location>();
-	
 	for (String listEntry : config.getStringList("location.teleport")) {
-	    String[] locationListString = listEntry.split(",");
-	    this.teleportLocations.add(new Location(getConfig().getWorld(), Integer.parseInt(locationListString[0]), Integer.parseInt(locationListString[1]), Integer.parseInt(locationListString[2])));
+	    this.teleportLocations.add(parseLocation(listEntry));
 	}
     }
     
@@ -67,7 +64,13 @@ public class HubWorld {
     }
     
     private String getLocationString(Location loc) {
-	return loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
+	return loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + "," + loc.getPitch() + "," + loc.getYaw();
+    }
+    
+    private Location parseLocation(String locationString) {
+	String[] locationArray = locationString.split(",");
+	return new Location(getConfig().getWorld(), Integer.parseInt(locationArray[0]), Integer.parseInt(locationArray[1]), Integer.parseInt(locationArray[2]), Float.parseFloat(locationArray[3]), Float.parseFloat(locationArray[4]));
+	
     }
     
     public World getWorld() {
