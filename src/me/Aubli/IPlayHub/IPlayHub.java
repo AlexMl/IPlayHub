@@ -1,6 +1,10 @@
 package me.Aubli.IPlayHub;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
+
+import me.Aubli.IPlayHub.Hub.HubManager;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.util.Logger.PluginOutput;
@@ -27,6 +31,8 @@ public class IPlayHub extends JavaPlugin {
 	
 	logger = new PluginOutput(getHub(), this.debugMode, this.logLevel);
 	
+	new HubManager();
+	
 	logger.log(getClass(), "Plugin enabled!", false);
     }
     
@@ -38,7 +44,19 @@ public class IPlayHub extends JavaPlugin {
 	return logger;
     }
     
+    public File getWorldFile() {
+	return new File(getDataFolder(), "world-config.yml");
+    }
+    
     private void loadConfig() {
+	
+	try {
+	    getWorldFile().getParentFile().mkdirs();
+	    getWorldFile().createNewFile();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+	
 	getConfig().addDefault("config.debugMode", false);
 	getConfig().addDefault("config.logLevel", Level.INFO.intValue());
 	
