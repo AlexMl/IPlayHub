@@ -1,0 +1,6 @@
+name: IPlayHub
+description: Simple Hub plugin
+author: Aubli
+version: 0.0.1
+
+main: me.Aubli.IPlayHub.IPlayHub
