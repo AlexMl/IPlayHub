@@ -6,6 +6,7 @@ version: 0.0.1
 main: me.Aubli.IPlayHub.IPlayHub
 
 commands:
-    ihub:
-        description: command
-        usage: /<command>
+    iplayhub:
+        description: IPlayHub command
+        usage: /<command> ?
+        aliases: [iph]

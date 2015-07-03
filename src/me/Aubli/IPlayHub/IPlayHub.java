@@ -38,7 +38,7 @@ public class IPlayHub extends JavaPlugin {
 	
 	new HubManager();
 	
-	getCommand("ihub").setExecutor(new IPlayHubCommands());
+	getCommand("iplayhub").setExecutor(new IPlayHubCommands());
 	
 	registerListeners();
 	logger.log(getClass(), "Plugin enabled!", false);
