@@ -4,3 +4,8 @@ author: Aubli
 version: 0.0.1
 
 main: me.Aubli.IPlayHub.IPlayHub
+
+commands:
+    ihub:
+        description: command
+        usage: /<command>
