@@ -5,7 +5,12 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import me.Aubli.IPlayHub.Hub.HubManager;
+import me.Aubli.IPlayHub.Listener.ConnectionListener;
+import me.Aubli.IPlayHub.Listener.EntityListener;
+import me.Aubli.IPlayHub.Listener.WeatherListener;
 
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.util.Logger.PluginOutput;
 
@@ -35,6 +40,7 @@ public class IPlayHub extends JavaPlugin {
 	
 	getCommand("ihub").setExecutor(new IPlayHubCommands());
 	
+	registerListeners();
 	logger.log(getClass(), "Plugin enabled!", false);
     }
     
@@ -67,5 +73,12 @@ public class IPlayHub extends JavaPlugin {
 	
 	getConfig().options().copyDefaults(true);
 	saveConfig();
+    }
+    
+    private void registerListeners() {
+	PluginManager pm = Bukkit.getPluginManager();
+	pm.registerEvents(new EntityListener(), this);
+	pm.registerEvents(new WeatherListener(), this);
+	pm.registerEvents(new ConnectionListener(), this);
     }
 }
