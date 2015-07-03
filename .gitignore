@@ -1,0 +1,14 @@
+*.class
+.classpath
+.project
+build.xml
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Folders #
+/bin
+/.settings
+/.externalToolBuilders
