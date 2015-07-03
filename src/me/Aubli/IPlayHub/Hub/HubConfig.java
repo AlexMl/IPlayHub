@@ -1,10 +1,15 @@
 package me.Aubli.IPlayHub.Hub;
 
+import java.io.IOException;
 import java.util.UUID;
+
+import me.Aubli.IPlayHub.IPlayHub;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 
 public class HubConfig {
@@ -28,7 +33,7 @@ public class HubConfig {
 	    loadSettings(configSection);
 	} else {
 	    setDefaultSettings();
-	    saveSettings(configSection);
+	    saveSettings();
 	}
     }
     
@@ -59,13 +64,22 @@ public class HubConfig {
 	// TODO fireworks
     }
     
-    private void saveSettings(ConfigurationSection config) {
-	config.set("enabled", isEnabled());
-	config.set("world", getWorld().getUID().toString());
+    private void saveSettings() {
+	FileConfiguration configConfiguration = YamlConfiguration.loadConfiguration(IPlayHub.getHub().getWorldFile());
+	ConfigurationSection configSection = configConfiguration.getConfigurationSection("worlds." + getWorld().getName());
+	configSection.set("enabled", isEnabled());
+	configSection.set("world", getWorld().getUID().toString());
 	
-	config.set("settings.pvp", isPlayerVsPlayer());
-	config.set("settings.hunger", isStarving());
-	config.set("settings.weatherActivity", isWeatherChanges());
+	configSection.set("settings.pvp", isPlayerVsPlayer());
+	configSection.set("settings.hunger", isStarving());
+	configSection.set("settings.weatherActivity", isWeatherChanges());
+	
+	try {
+	    configConfiguration.save(IPlayHub.getHub().getWorldFile());
+	} catch (IOException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	// TODO fireworks
     }
     
