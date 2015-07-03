@@ -76,6 +76,11 @@ public class HubManager {
     }
     
     public HubWorld getHub(World world) {
+	for (HubWorld hub : this.hubList) {
+	    if (hub.getWorld().equals(world)) {
+		return hub;
+	    }
+	}
 	return null;
     }
 }
