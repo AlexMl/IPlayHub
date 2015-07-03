@@ -64,7 +64,7 @@ public class HubWorld {
     }
     
     private String getLocationString(Location loc) {
-	return loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + "," + loc.getPitch() + "," + loc.getYaw();
+	return loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + "," + loc.getYaw() + "," + loc.getPitch();
     }
     
     private Location parseLocation(String locationString) {
