@@ -97,7 +97,21 @@ public class IPlayHubCommands implements CommandExecutor {
     }
     
     private void printHelp(Player player) {
-	// TODO
+	// TODO colors
+	String version = IPlayHub.getHub().getDescription().getName() + "v" + IPlayHub.getHub().getDescription().getVersion() + " Help";
+	int dashAmount = 53 - (1 + 2 + version.length());
+	String dashs = "";
+	for (int i = 0; i < Math.floor(dashAmount / 2); i++) {
+	    dashs += "-";
+	}
+	
+	player.sendMessage("|" + dashs + " " + version + " " + dashs);
+	
+	player.sendMessage("| /iplayhub");
+	player.sendMessage("| /iplayhub init");
+	player.sendMessage("| /iplayhub spawn");
+	player.sendMessage("| /iplayhub tpadd [name]");
+	player.sendMessage("| /iplayhub teleport");
     }
     
     private void commandDenied(Player player) {
