@@ -13,21 +13,21 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 
-public class HubWorld {
+public class WorldHub {
     
     private HubConfig config;
     
     private HubPoint hubSpawn;
     private List<HubPoint> teleportLocations;
     
-    public HubWorld(HubConfig config, Location spawnLoc) {
+    public WorldHub(HubConfig config, Location spawnLoc) {
 	this.config = config;
 	this.hubSpawn = new HubPoint(spawnLoc.clone(), "spawn");
 	this.teleportLocations = new ArrayList<HubPoint>();
 	saveConfig();
     }
     
-    public HubWorld(ConfigurationSection section) throws Exception {
+    public WorldHub(ConfigurationSection section) throws Exception {
 	this.config = new HubConfig(section);
 	loadConfig();
 	System.out.println(getTeleportPoints());

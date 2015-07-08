@@ -2,7 +2,7 @@ package me.Aubli.IPlayHub;
 
 import me.Aubli.IPlayHub.Hub.HubManager;
 import me.Aubli.IPlayHub.Hub.HubPoint;
-import me.Aubli.IPlayHub.Hub.HubWorld;
+import me.Aubli.IPlayHub.Hub.WorldHub;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -27,7 +27,7 @@ public class IPlayHubCommands implements CommandExecutor {
 	    Player playerSender = (Player) sender;
 	    
 	    if (args.length == 0) {
-		HubWorld hub = HubManager.getManager().getHub(playerSender.getWorld());
+		WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
 		if (hub != null) {
 		    playerSender.teleport(hub.getSpawnPoint().getLocation(), TeleportCause.PLUGIN);
 		} else {
@@ -40,7 +40,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("init")) {
 		    if (playerSender.hasPermission("iplayhub.admin")) {
 			try {
-			    HubWorld hub = HubManager.getManager().registerHub(playerSender.getWorld(), playerSender.getLocation().clone());
+			    WorldHub hub = HubManager.getManager().registerHub(playerSender.getWorld(), playerSender.getLocation().clone());
 			    playerSender.sendMessage(hub.toString());// Message
 			} catch (Exception e) {
 			    playerSender.sendMessage("Error: " + e.getMessage());// Message
@@ -52,7 +52,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		}
 		
 		if (args[0].equalsIgnoreCase("spawn")) {
-		    HubWorld hub = HubManager.getManager().getHub(playerSender.getWorld());
+		    WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
 		    if (hub != null) {
 			playerSender.teleport(hub.getSpawnPoint().getLocation(), TeleportCause.PLUGIN);
 		    } else {
@@ -73,7 +73,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		
 		if (args[0].equalsIgnoreCase("tps")) {
 		    if (playerSender.hasPermission("iplayhub.teleport")) {
-			HubWorld hub = HubManager.getManager().getHub(playerSender.getWorld());
+			WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
 			
 			if (hub != null) {
 			    playerSender.sendMessage("Available Teleport Points:");
@@ -102,7 +102,7 @@ public class IPlayHubCommands implements CommandExecutor {
 	    if (args.length == 2) {
 		if (args[0].equalsIgnoreCase("tpadd")) {
 		    if (playerSender.hasPermission("iplayhub.admin")) {
-			HubWorld hub = HubManager.getManager().getHub(playerSender.getWorld());
+			WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
 			if (hub != null) {
 			    HubPoint point = hub.addTeleportPoint(playerSender.getLocation().clone(), args[1]);
 			    hub.saveConfig();
@@ -124,7 +124,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		
 		if (args[0].equalsIgnoreCase("tp")) {
 		    if (playerSender.hasPermission("iplayhub.teleport")) {
-			HubWorld hub = HubManager.getManager().getHub(playerSender.getWorld());
+			WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
 			
 			if (hub != null) {
 			    if (hub.getTeleportPoint(args[1]) != null) {
@@ -146,7 +146,7 @@ public class IPlayHubCommands implements CommandExecutor {
 	    if (args.length == 3) {
 		if (args[0].equalsIgnoreCase("tpadd")) {
 		    if (playerSender.hasPermission("iplayhub.admin")) {
-			HubWorld hub = HubManager.getManager().getHub(playerSender.getWorld());
+			WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
 			if (hub != null) {
 			    HubPoint point = hub.addTeleportPoint(playerSender.getLocation().clone(), args[1], args[2]);
 			    hub.saveConfig();

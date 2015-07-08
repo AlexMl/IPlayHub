@@ -17,7 +17,7 @@ public class HubManager {
     
     private static HubManager instance;
     
-    private List<HubWorld> hubList;
+    private List<WorldHub> hubList;
     
     public HubManager() {
 	instance = this;
@@ -27,14 +27,14 @@ public class HubManager {
     private void initialize() {
 	FileConfiguration config = YamlConfiguration.loadConfiguration(IPlayHub.getHub().getWorldFile());
 	
-	this.hubList = new ArrayList<HubWorld>();
+	this.hubList = new ArrayList<WorldHub>();
 	
 	if (config.get("worlds") != null) {
 	    
 	    for (String worlds : config.getConfigurationSection("worlds").getKeys(false)) {
 		try {
-		    HubWorld hubWorld = new HubWorld(config.getConfigurationSection("worlds." + worlds));
-		    this.hubList.add(hubWorld);
+		    WorldHub worldHub = new WorldHub(config.getConfigurationSection("worlds." + worlds));
+		    this.hubList.add(worldHub);
 		} catch (Exception e) {
 		    // TODO logger
 		    e.printStackTrace();
@@ -52,8 +52,8 @@ public class HubManager {
 	
     }
     
-    public HubWorld registerHub(World world, Location spawnLocation) throws Exception {
-	HubWorld hub = new HubWorld(new HubConfig(world, createSection(world)), spawnLocation.clone());
+    public WorldHub registerHub(World world, Location spawnLocation) throws Exception {
+	WorldHub hub = new WorldHub(new HubConfig(world, createSection(world)), spawnLocation.clone());
 	this.hubList.add(hub);
 	return hub;
     }
@@ -75,8 +75,8 @@ public class HubManager {
 	return instance;
     }
     
-    public HubWorld getHub(World world) {
-	for (HubWorld hub : this.hubList) {
+    public WorldHub getHub(World world) {
+	for (WorldHub hub : this.hubList) {
 	    if (hub.getWorld().equals(world)) {
 		return hub;
 	    }

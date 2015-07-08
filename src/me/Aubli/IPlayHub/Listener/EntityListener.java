@@ -1,7 +1,7 @@
 package me.Aubli.IPlayHub.Listener;
 
 import me.Aubli.IPlayHub.Hub.HubManager;
-import me.Aubli.IPlayHub.Hub.HubWorld;
+import me.Aubli.IPlayHub.Hub.WorldHub;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +18,7 @@ public class EntityListener implements Listener {
 	if (event.getDamager() instanceof Player) {
 	    if (event.getEntity() instanceof Player) {
 		
-		HubWorld hub = HubManager.getManager().getHub(event.getEntity().getWorld());
+		WorldHub hub = HubManager.getManager().getHub(event.getEntity().getWorld());
 		
 		if (hub != null) {
 		    if (hub.isEnabled()) {
@@ -38,7 +38,7 @@ public class EntityListener implements Listener {
     @EventHandler
     public void onFoodLevelChange(FoodLevelChangeEvent event) {
 	
-	HubWorld hub = HubManager.getManager().getHub(event.getEntity().getWorld());
+	WorldHub hub = HubManager.getManager().getHub(event.getEntity().getWorld());
 	
 	if (hub != null) {
 	    if (hub.isEnabled()) {

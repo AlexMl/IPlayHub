@@ -1,7 +1,7 @@
 package me.Aubli.IPlayHub.Listener;
 
 import me.Aubli.IPlayHub.Hub.HubManager;
-import me.Aubli.IPlayHub.Hub.HubWorld;
+import me.Aubli.IPlayHub.Hub.WorldHub;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,7 +13,7 @@ public class WeatherListener implements Listener {
     @EventHandler
     public void onWeatherChange(WeatherChangeEvent event) {
 	
-	HubWorld hub = HubManager.getManager().getHub(event.getWorld());
+	WorldHub hub = HubManager.getManager().getHub(event.getWorld());
 	
 	if (hub != null) {
 	    if (hub.isEnabled()) {
