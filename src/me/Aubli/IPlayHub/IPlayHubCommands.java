@@ -1,6 +1,7 @@
 package me.Aubli.IPlayHub;
 
 import me.Aubli.IPlayHub.Hub.HubManager;
+import me.Aubli.IPlayHub.Hub.HubPoint;
 import me.Aubli.IPlayHub.Hub.HubWorld;
 
 import org.bukkit.ChatColor;
@@ -28,7 +29,7 @@ public class IPlayHubCommands implements CommandExecutor {
 	    if (args.length == 0) {
 		HubWorld hub = HubManager.getManager().getHub(playerSender.getWorld());
 		if (hub != null) {
-		    playerSender.teleport(hub.getSpawnLocation(), TeleportCause.PLUGIN);
+		    playerSender.teleport(hub.getSpawnPoint().getLocation(), TeleportCause.PLUGIN);
 		} else {
 		    printHelp(playerSender);
 		}
@@ -53,19 +54,32 @@ public class IPlayHubCommands implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("spawn")) {
 		    HubWorld hub = HubManager.getManager().getHub(playerSender.getWorld());
 		    if (hub != null) {
-			playerSender.teleport(hub.getSpawnLocation(), TeleportCause.PLUGIN);
+			playerSender.teleport(hub.getSpawnPoint().getLocation(), TeleportCause.PLUGIN);
 		    } else {
 			playerSender.sendMessage("No hub in this world!");// Message
 		    }
 		    return true;
 		}
 		
+		if (args[0].equalsIgnoreCase("help") || args[0].equals("?")) {
+		    printHelp(playerSender);
+		    return true;
+		}
+		
+		if (args[0].equalsIgnoreCase("teleport") || args[0].equalsIgnoreCase("tp")) {
+		    // TODO tp gui
+		    return true;
+		}
+	    }
+	    
+	    if (args.length == 2) {
 		if (args[0].equalsIgnoreCase("tpadd")) {
 		    if (playerSender.hasPermission("iplayhub.admin")) {
 			HubWorld hub = HubManager.getManager().getHub(playerSender.getWorld());
 			if (hub != null) {
-			    boolean success = hub.addTeleportPoint(playerSender.getLocation().clone());
-			    if (success) {
+			    HubPoint point = hub.addTeleportPoint(playerSender.getLocation().clone(), args[1]);
+			    hub.saveConfig();
+			    if (point != null) {
 				playerSender.sendMessage("Teleport point added!"); // Message
 			    } else {
 				playerSender.sendMessage("Error on adding point!");// Message
@@ -80,16 +94,6 @@ public class IPlayHubCommands implements CommandExecutor {
 			return true;
 		    }
 		}
-		
-		if (args[0].equalsIgnoreCase("help") || args[0].equals("?")) {
-		    printHelp(playerSender);
-		    return true;
-		}
-		
-		if (args[0].equalsIgnoreCase("teleport") || args[0].equalsIgnoreCase("tp")) {
-		    // TODO tp gui
-		    return true;
-		}
 	    }
 	    
 	}
@@ -98,7 +102,7 @@ public class IPlayHubCommands implements CommandExecutor {
     
     private void printHelp(Player player) {
 	// TODO colors
-	String version = IPlayHub.getHub().getDescription().getName() + "v" + IPlayHub.getHub().getDescription().getVersion() + " Help";
+	String version = IPlayHub.getHub().getDescription().getName() + " v" + IPlayHub.getHub().getDescription().getVersion() + " Help";
 	int dashAmount = 53 - (1 + 2 + version.length());
 	String dashs = "";
 	for (int i = 0; i < Math.floor(dashAmount / 2); i++) {

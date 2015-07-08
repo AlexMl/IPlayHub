@@ -17,43 +17,48 @@ public class HubWorld {
     
     private HubConfig config;
     
-    private Location hubSpawn;
-    private List<Location> teleportLocations;
+    private HubPoint hubSpawn;
+    private List<HubPoint> teleportLocations;
     
     public HubWorld(HubConfig config, Location spawnLoc) {
 	this.config = config;
-	this.hubSpawn = spawnLoc.clone();
-	this.teleportLocations = new ArrayList<Location>();
+	this.hubSpawn = new HubPoint(spawnLoc.clone(), "spawn");
+	this.teleportLocations = new ArrayList<HubPoint>();
 	saveConfig();
     }
     
     public HubWorld(ConfigurationSection section) throws Exception {
 	this.config = new HubConfig(section);
 	loadConfig();
+	System.out.println(getTeleportPoints());
+	System.out.println(getSpawnPoint());
     }
     
     private void loadConfig() {
 	ConfigurationSection config = getConfig().getConfigSection();
 	
-	this.hubSpawn = parseLocation(config.getString("location.spawn"));
+	this.hubSpawn = new HubPoint(parseLocation(config.getString("location.spawn")), "spawn");
 	
-	this.teleportLocations = new ArrayList<Location>();
-	for (String listEntry : config.getStringList("location.teleport")) {
-	    this.teleportLocations.add(parseLocation(listEntry));
+	ConfigurationSection tpSection = config.getConfigurationSection("location.teleport");
+	this.teleportLocations = new ArrayList<HubPoint>();
+	
+	if (tpSection != null) {
+	    for (String sectionKey : tpSection.getValues(false).keySet()) {
+		HubPoint point = new HubPoint(parseLocation(tpSection.getString(sectionKey + ".location")), sectionKey, tpSection.getString(sectionKey + ".permission"));
+		this.teleportLocations.add(point);
+	    }
 	}
     }
     
     public void saveConfig() {
 	FileConfiguration configConfiguration = YamlConfiguration.loadConfiguration(IPlayHub.getHub().getWorldFile());
 	ConfigurationSection configSection = configConfiguration.getConfigurationSection("worlds." + getConfig().getWorld().getName());
-	configSection.set("location.spawn", getLocationString(getSpawnLocation()));
+	configSection.set("location.spawn", getLocationString(getSpawnPoint()));
 	
-	List<String> locationStringList = new ArrayList<String>();
-	
-	for (Location loc : getTeleportPoints()) {
-	    locationStringList.add(getLocationString(loc));
+	for (HubPoint tpPoint : getTeleportPoints()) {
+	    configSection.set("location.teleport." + tpPoint.getName() + ".location", getLocationString(tpPoint));
+	    configSection.set("location.teleport." + tpPoint.getName() + ".permission", tpPoint.getPermNode());
 	}
-	configSection.set("location.teleport", locationStringList);
 	
 	try {
 	    configConfiguration.save(IPlayHub.getHub().getWorldFile());
@@ -63,25 +68,28 @@ public class HubWorld {
 	}
     }
     
+    private String getLocationString(HubPoint loc) {
+	return getLocationString(loc.getLocation());
+    }
+    
     private String getLocationString(Location loc) {
-	return loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + "," + loc.getYaw() + "," + loc.getPitch();
+	return loc.getX() + "," + loc.getY() + "," + loc.getZ() + "," + loc.getYaw() + "," + loc.getPitch();
     }
     
     private Location parseLocation(String locationString) {
 	String[] locationArray = locationString.split(",");
-	return new Location(getConfig().getWorld(), Integer.parseInt(locationArray[0]), Integer.parseInt(locationArray[1]), Integer.parseInt(locationArray[2]), Float.parseFloat(locationArray[3]), Float.parseFloat(locationArray[4]));
-	
+	return new Location(getConfig().getWorld(), Double.parseDouble(locationArray[0]), Double.parseDouble(locationArray[1]), Double.parseDouble(locationArray[2]), Float.parseFloat(locationArray[3]), Float.parseFloat(locationArray[4]));
     }
     
     public World getWorld() {
 	return getConfig().getWorld();
     }
     
-    public Location getSpawnLocation() {
-	return this.hubSpawn.clone();
+    public HubPoint getSpawnPoint() {
+	return this.hubSpawn;
     }
     
-    public List<Location> getTeleportPoints() {
+    public List<HubPoint> getTeleportPoints() {
 	return this.teleportLocations;
     }
     
@@ -93,8 +101,10 @@ public class HubWorld {
 	return getConfig().isEnabled();
     }
     
-    public boolean addTeleportPoint(Location location) {
-	return this.teleportLocations.add(location);
+    public HubPoint addTeleportPoint(Location location, String name) {
+	HubPoint point = new HubPoint(location, name);
+	this.teleportLocations.add(point);
+	return point;
     }
     
     @Override
