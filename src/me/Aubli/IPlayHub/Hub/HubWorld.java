@@ -93,6 +93,15 @@ public class HubWorld {
 	return this.teleportLocations;
     }
     
+    public HubPoint getTeleportPoint(String name) {
+	for (HubPoint hp : getTeleportPoints()) {
+	    if (hp.getName().equals(name)) {
+		return hp;
+	    }
+	}
+	return null;
+    }
+    
     public HubConfig getConfig() {
 	return this.config;
     }
@@ -102,9 +111,17 @@ public class HubWorld {
     }
     
     public HubPoint addTeleportPoint(Location location, String name) {
-	HubPoint point = new HubPoint(location, name);
-	this.teleportLocations.add(point);
-	return point;
+	return addTeleportPoint(location, name, "");
+    }
+    
+    public HubPoint addTeleportPoint(Location location, String name, String permissionNode) {
+	if (getTeleportPoint(name) == null) {
+	    HubPoint point = new HubPoint(location, name, permissionNode);
+	    this.teleportLocations.add(point);
+	    return point;
+	} else {
+	    return null;
+	}
     }
     
     @Override

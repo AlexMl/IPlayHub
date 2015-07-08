@@ -70,6 +70,33 @@ public class IPlayHubCommands implements CommandExecutor {
 		    // TODO tp gui
 		    return true;
 		}
+		
+		if (args[0].equalsIgnoreCase("tps")) {
+		    if (playerSender.hasPermission("iplayhub.teleport")) {
+			HubWorld hub = HubManager.getManager().getHub(playerSender.getWorld());
+			
+			if (hub != null) {
+			    playerSender.sendMessage("Available Teleport Points:");
+			    String tps = "";
+			    for (HubPoint tpPoint : hub.getTeleportPoints()) {
+				if (playerSender.hasPermission(tpPoint.getPermNode())) {
+				    tps += tpPoint.getName() + ", ";
+				}
+			    }
+			    if (tps.length() > 0) {
+				playerSender.sendMessage(tps.substring(0, tps.length() - 2));
+			    } else {
+				playerSender.sendMessage("No available Teleport points for you!");
+			    }
+			} else {
+			    playerSender.sendMessage("No hub in this world!");// Message
+			}
+			return true;
+		    }
+		} else {
+		    commandDenied(playerSender);
+		    return true;
+		}
 	    }
 	    
 	    if (args.length == 2) {
@@ -82,7 +109,51 @@ public class IPlayHubCommands implements CommandExecutor {
 			    if (point != null) {
 				playerSender.sendMessage("Teleport point added!"); // Message
 			    } else {
-				playerSender.sendMessage("Error on adding point!");// Message
+				playerSender.sendMessage("Point named " + args[1] + " alreadey exists!");// Message
+			    }
+			    return true;
+			} else {
+			    playerSender.sendMessage("There is no hub in this world!"); // Message
+			    return true;
+			}
+		    } else {
+			commandDenied(playerSender);
+			return true;
+		    }
+		}
+		
+		if (args[0].equalsIgnoreCase("tp")) {
+		    if (playerSender.hasPermission("iplayhub.teleport")) {
+			HubWorld hub = HubManager.getManager().getHub(playerSender.getWorld());
+			
+			if (hub != null) {
+			    if (hub.getTeleportPoint(args[1]) != null) {
+				playerSender.teleport(hub.getTeleportPoint(args[1]).getLocation(), TeleportCause.PLUGIN);
+			    } else {
+				playerSender.sendMessage("Point named " + args[1] + " does not exist!");// Message
+			    }
+			} else {
+			    playerSender.sendMessage("No hub in this world!");// Message
+			}
+			return true;
+		    } else {
+			commandDenied(playerSender);
+			return true;
+		    }
+		}
+	    }
+	    
+	    if (args.length == 3) {
+		if (args[0].equalsIgnoreCase("tpadd")) {
+		    if (playerSender.hasPermission("iplayhub.admin")) {
+			HubWorld hub = HubManager.getManager().getHub(playerSender.getWorld());
+			if (hub != null) {
+			    HubPoint point = hub.addTeleportPoint(playerSender.getLocation().clone(), args[1], args[2]);
+			    hub.saveConfig();
+			    if (point != null) {
+				playerSender.sendMessage("Teleport point added!"); // Message
+			    } else {
+				playerSender.sendMessage("Point named " + args[1] + " alreadey exists!");// Message
 			    }
 			    return true;
 			} else {
@@ -114,11 +185,16 @@ public class IPlayHubCommands implements CommandExecutor {
 	player.sendMessage("| /iplayhub");
 	player.sendMessage("| /iplayhub init");
 	player.sendMessage("| /iplayhub spawn");
+	player.sendMessage("| /iplayhub tps");
+	player.sendMessage("| /iplayhub tp");
+	player.sendMessage("| /iplayhub tp [name]");
 	player.sendMessage("| /iplayhub tpadd [name]");
-	player.sendMessage("| /iplayhub teleport");
+	player.sendMessage("| /iplayhub tpadd [name] [permission]");
+	
     }
     
     private void commandDenied(Player player) {
 	player.sendMessage(ChatColor.DARK_RED + "You do not have enough Permissions to perform that command!");
     }
+    
 }
