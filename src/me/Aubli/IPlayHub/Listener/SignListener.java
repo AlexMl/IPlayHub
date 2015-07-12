@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -29,7 +30,7 @@ public class SignListener implements Listener {
 		    WorldHub hub = HubManager.getManager().getHub(Bukkit.getWorld(worldName));
 		    
 		    if (hub != null) {
-			if (hub.getTeleportPoint(tpName) != null) {
+			if (hub.getTeleportPoint(tpName) != null) { // TODO colors
 			    event.setLine(0, "[IPH]");
 			    event.setLine(1, "Hub Teleport");
 			    event.setLine(2, tpName);
@@ -91,6 +92,20 @@ public class SignListener implements Listener {
 		}
 	    }
 	}
-	
+    }
+    
+    @EventHandler
+    public void onSignBreak(BlockBreakEvent event) {
+	if (event.getBlock().getState() instanceof Sign) {
+	    Sign eventSign = (Sign) event.getBlock().getState();
+	    
+	    if (eventSign.getLine(0).equalsIgnoreCase("[iph]")) { // TODO prefix
+		if (!event.getPlayer().hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
+		    event.setCancelled(true);
+		    IPlayHubPermissions.deny(event.getPlayer());
+		    return;
+		}
+	    }
+	}
     }
 }
