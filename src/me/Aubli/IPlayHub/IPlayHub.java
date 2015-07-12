@@ -13,6 +13,7 @@ import me.Aubli.IPlayHub.Listener.WeatherListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.util.Logger.PluginOutput;
@@ -36,6 +37,11 @@ public class IPlayHub extends JavaPlugin {
     
     private boolean debugMode;
     private int logLevel;
+    
+    // Config values
+    private static boolean joinAtHub;
+    private static World mainWorld;
+    private static String welcomeMessage;
     
     @Override
     public void onDisable() {
@@ -73,6 +79,18 @@ public class IPlayHub extends JavaPlugin {
 	return new File(getDataFolder(), "world-config.yml");
     }
     
+    public static boolean isJoinAtHub() {
+	return joinAtHub;
+    }
+    
+    public static World getMainWorld() {
+	return mainWorld;
+    }
+    
+    public static String getWelcomeMessage() {
+	return welcomeMessage;
+    }
+    
     private void loadConfig() {
 	
 	try {
@@ -85,8 +103,16 @@ public class IPlayHub extends JavaPlugin {
 	getConfig().addDefault("config.debugMode", false);
 	getConfig().addDefault("config.logLevel", Level.INFO.intValue());
 	
+	getConfig().addDefault("config.mainWorld", Bukkit.getWorlds().get(0).getName());
+	getConfig().addDefault("config.joinAtHub", true);
+	getConfig().addDefault("config.welcomeMessage", ChatColor.BOLD + "" + ChatColor.GOLD + "WELCOME!");
+	
 	this.debugMode = getConfig().getBoolean("config.debugMode");
 	this.logLevel = getConfig().getInt("config.logLevel");
+	
+	mainWorld = Bukkit.getWorld(getConfig().getString("config.mainWorld"));
+	joinAtHub = getConfig().getBoolean("config.joinAtHub");
+	welcomeMessage = getConfig().getString("config.welcomeMessage");
 	
 	getConfig().options().copyDefaults(true);
 	saveConfig();
