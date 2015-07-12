@@ -83,4 +83,13 @@ public class HubManager {
 	}
 	return null;
     }
+    
+    public WorldHub[] getWorldHubs() {
+	WorldHub[] hubs = new WorldHub[this.hubList.size()];
+	
+	for (WorldHub hub : this.hubList) {
+	    hubs[this.hubList.indexOf(hub)] = hub;
+	}
+	return hubs;
+    }
 }

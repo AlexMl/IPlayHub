@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import me.Aubli.IPlayHub.Hub.HubManager;
 import me.Aubli.IPlayHub.Listener.ConnectionListener;
 import me.Aubli.IPlayHub.Listener.EntityListener;
+import me.Aubli.IPlayHub.Listener.GUIListener;
 import me.Aubli.IPlayHub.Listener.SignListener;
 import me.Aubli.IPlayHub.Listener.WeatherListener;
 
@@ -82,5 +83,6 @@ public class IPlayHub extends JavaPlugin {
 	pm.registerEvents(new WeatherListener(), this);
 	pm.registerEvents(new ConnectionListener(), this);
 	pm.registerEvents(new SignListener(), this);
+	pm.registerEvents(new GUIListener(), this);
     }
 }

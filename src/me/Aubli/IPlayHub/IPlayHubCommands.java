@@ -1,15 +1,23 @@
 package me.Aubli.IPlayHub;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.Aubli.IPlayHub.Hub.HubManager;
 import me.Aubli.IPlayHub.Hub.HubPoint;
 import me.Aubli.IPlayHub.Hub.WorldHub;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 
 public class IPlayHubCommands implements CommandExecutor {
@@ -67,7 +75,28 @@ public class IPlayHubCommands implements CommandExecutor {
 		}
 		
 		if (args[0].equalsIgnoreCase("teleport") || args[0].equalsIgnoreCase("tp")) {
-		    // TODO tp gui
+		    if (playerSender.hasPermission("iplayhub.teleport")) {
+			Inventory hubInv = Bukkit.createInventory(playerSender, (int) (Math.ceil(HubManager.getManager().getWorldHubs().length / 9.0) * 9), "Teleporters by World!");
+			
+			for (WorldHub hub : HubManager.getManager().getWorldHubs()) {
+			    if (hub.getTeleportPoints().size() > 0) {
+				ItemStack hubItem = new ItemStack(Material.CHEST);
+				ItemMeta hubItemMeta = hubItem.getItemMeta();
+				hubItemMeta.setDisplayName(hub.getWorld().getName());
+				
+				List<String> lore = new ArrayList<String>();
+				lore.add("Teleport Points of world " + hub.getWorld().getName() + "!");
+				hubItemMeta.setLore(lore);
+				hubItem.setItemMeta(hubItemMeta);
+				hubInv.addItem(hubItem);
+			    }
+			}
+			playerSender.closeInventory();
+			playerSender.openInventory(hubInv);
+			return true;
+		    } else {
+			commandDenied(playerSender);
+		    }
 		    return true;
 		}
 		
