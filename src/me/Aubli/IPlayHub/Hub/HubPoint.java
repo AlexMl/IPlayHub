@@ -1,5 +1,7 @@
 package me.Aubli.IPlayHub.Hub;
 
+import me.Aubli.IPlayHub.IPlayHubPermissions;
+
 import org.bukkit.Location;
 
 
@@ -10,7 +12,7 @@ public class HubPoint {
     private String permNode;
     
     public HubPoint(Location location, String name) {
-	this(location, name, "");
+	this(location, name, IPlayHubPermissions.Teleport.getPermissionNode());
     }
     
     public HubPoint(Location location, String name, String permissionNode) {

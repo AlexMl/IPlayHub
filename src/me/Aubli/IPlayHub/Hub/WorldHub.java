@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.Aubli.IPlayHub.IPlayHub;
+import me.Aubli.IPlayHub.IPlayHubPermissions;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -111,7 +112,7 @@ public class WorldHub {
     }
     
     public HubPoint addTeleportPoint(Location location, String name) {
-	return addTeleportPoint(location, name, "");
+	return addTeleportPoint(location, name, IPlayHubPermissions.Teleport.getPermissionNode());
     }
     
     public HubPoint addTeleportPoint(Location location, String name, String permissionNode) {
