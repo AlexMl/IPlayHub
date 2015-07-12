@@ -53,9 +53,15 @@ public class HubManager {
     }
     
     public WorldHub registerHub(World world, Location spawnLocation) throws Exception {
-	WorldHub hub = new WorldHub(new HubConfig(world, createSection(world)), spawnLocation.clone());
-	this.hubList.add(hub);
-	return hub;
+	if (getHub(world) == null) {
+	    WorldHub hub = new WorldHub(new HubConfig(world, createSection(world)), spawnLocation.clone());
+	    this.hubList.add(hub);
+	    return hub;
+	} else {
+	    throw new Exception("World already initialized!");
+	    // TODO logger
+	}
+	
     }
     
     private ConfigurationSection createSection(World world) throws Exception {
