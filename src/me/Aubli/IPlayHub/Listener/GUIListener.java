@@ -3,6 +3,7 @@ package me.Aubli.IPlayHub.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.Aubli.IPlayHub.IPlayHubPermissions;
 import me.Aubli.IPlayHub.Hub.HubManager;
 import me.Aubli.IPlayHub.Hub.HubPoint;
 import me.Aubli.IPlayHub.Hub.WorldHub;
@@ -35,7 +36,7 @@ public class GUIListener implements Listener {
 	    }
 	    
 	    if (event.getCurrentItem() != null && event.getCurrentItem().getType() != Material.AIR) {
-		if (eventPlayer.hasPermission("iplayhub.teleport")) {
+		if (eventPlayer.hasPermission(IPlayHubPermissions.Teleport.getPermissionNode())) {
 		    if (invName.equals("Teleporters by World!")) {
 			WorldHub hub = HubManager.getManager().getHub(Bukkit.getWorld(event.getCurrentItem().getItemMeta().getDisplayName()));
 			

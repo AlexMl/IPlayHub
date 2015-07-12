@@ -1,5 +1,6 @@
 package me.Aubli.IPlayHub.Listener;
 
+import me.Aubli.IPlayHub.IPlayHubPermissions;
 import me.Aubli.IPlayHub.Hub.HubManager;
 import me.Aubli.IPlayHub.Hub.WorldHub;
 
@@ -17,7 +18,7 @@ public class SignListener implements Listener {
 	Player eventPlayer = event.getPlayer();
 	
 	if (event.getLine(0).equalsIgnoreCase("[iph]")) {
-	    if (eventPlayer.hasPermission("iplayhub.admin")) {
+	    if (eventPlayer.hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
 		if (!event.getLine(1).isEmpty() && !event.getLine(2).isEmpty()) {
 		    String worldName = event.getLine(1);
 		    String tpName = event.getLine(2);
