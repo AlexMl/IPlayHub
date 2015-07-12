@@ -8,7 +8,6 @@ import me.Aubli.IPlayHub.Hub.HubPoint;
 import me.Aubli.IPlayHub.Hub.WorldHub;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -223,7 +222,7 @@ public class IPlayHubCommands implements CommandExecutor {
     }
     
     private void commandDenied(Player player) {
-	player.sendMessage(ChatColor.DARK_RED + "You do not have enough Permissions to perform that command!");
+	IPlayHubPermissions.deny(player);
     }
     
 }
