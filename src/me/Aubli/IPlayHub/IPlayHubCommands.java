@@ -48,7 +48,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		    if (playerSender.hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
 			try {
 			    WorldHub hub = HubManager.getManager().registerHub(playerSender.getWorld(), playerSender.getLocation().clone());
-			    playerSender.sendMessage(hub.toString());// Message
+			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.hub_created, hub.getWorld().getName());
 			} catch (Exception e) {
 			    playerSender.sendMessage("Error: " + e.getMessage());// Message
 			}
@@ -63,7 +63,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		    if (hub != null) {
 			playerSender.teleport(hub.getSpawnPoint().getLocation(), TeleportCause.PLUGIN);
 		    } else {
-			playerSender.sendMessage("No hub in this world!");// Message
+			IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.no_hub_in_world, playerSender.getWorld().getName());
 		    }
 		    return true;
 		}
@@ -76,7 +76,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("teleport") || args[0].equalsIgnoreCase("tp")) {
 		    if (playerSender.hasPermission(IPlayHubPermissions.Teleport.getPermissionNode())) {
 			Inventory hubInv = Bukkit.createInventory(playerSender, (int) (Math.ceil(HubManager.getManager().getWorldHubs().length / 9.0) * 9), "Teleporters by World!");
-			
+			// TODO add spawn locations to list, as first
 			for (WorldHub hub : HubManager.getManager().getWorldHubs()) {
 			    if (hub.getTeleportPoints().size() > 0) {
 				ItemStack hubItem = new ItemStack(Material.CHEST);
@@ -104,20 +104,20 @@ public class IPlayHubCommands implements CommandExecutor {
 			WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
 			
 			if (hub != null) {
-			    playerSender.sendMessage("Available Teleport Points:");
+			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.available_points);
 			    String tps = "";
 			    for (HubPoint tpPoint : hub.getTeleportPoints()) {
 				if (playerSender.hasPermission(tpPoint.getPermNode())) {
-				    tps += tpPoint.getName() + ", ";
+				    tps += tpPoint.getName() + ", ";// TODO do it nicer, color?
 				}
 			    }
 			    if (tps.length() > 0) {
 				playerSender.sendMessage(tps.substring(0, tps.length() - 2));
 			    } else {
-				playerSender.sendMessage("No available Teleport points for you!");
+				IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.no_teleport_points);
 			    }
 			} else {
-			    playerSender.sendMessage("No hub in this world!");// Message
+			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.no_hub_in_world, playerSender.getWorld().getName());
 			}
 			return true;
 		    }
@@ -135,13 +135,13 @@ public class IPlayHubCommands implements CommandExecutor {
 			    HubPoint point = hub.addTeleportPoint(playerSender.getLocation().clone(), args[1]);
 			    hub.saveConfig();
 			    if (point != null) {
-				playerSender.sendMessage("Teleport point added!"); // Message
+				IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.teleport_added, point.getName());
 			    } else {
-				playerSender.sendMessage("Point named " + args[1] + " alreadey exists!");// Message
+				IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.teleport_already_exists, args[1]);
 			    }
 			    return true;
 			} else {
-			    playerSender.sendMessage("There is no hub in this world!"); // Message
+			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.no_hub_in_world, playerSender.getWorld().getName());
 			    return true;
 			}
 		    } else {
@@ -158,10 +158,10 @@ public class IPlayHubCommands implements CommandExecutor {
 			    if (hub.getTeleportPoint(args[1]) != null) {
 				playerSender.teleport(hub.getTeleportPoint(args[1]).getLocation(), TeleportCause.PLUGIN);
 			    } else {
-				playerSender.sendMessage("Point named " + args[1] + " does not exist!");// Message
+				IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.teleport_does_not_exist, args[1]);
 			    }
 			} else {
-			    playerSender.sendMessage("No hub in this world!");// Message
+			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.no_hub_in_world, playerSender.getWorld().getName());
 			}
 			return true;
 		    } else {
@@ -179,13 +179,13 @@ public class IPlayHubCommands implements CommandExecutor {
 			    HubPoint point = hub.addTeleportPoint(playerSender.getLocation().clone(), args[1], args[2]);
 			    hub.saveConfig();
 			    if (point != null) {
-				playerSender.sendMessage("Teleport point added!"); // Message
+				IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.teleport_added, args[1]);
 			    } else {
-				playerSender.sendMessage("Point named " + args[1] + " alreadey exists!");// Message
+				IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.teleport_already_exists, args[1]);
 			    }
 			    return true;
 			} else {
-			    playerSender.sendMessage("There is no hub in this world!"); // Message
+			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.no_hub_in_world, playerSender.getWorld().getName());
 			    return true;
 			}
 		    } else {

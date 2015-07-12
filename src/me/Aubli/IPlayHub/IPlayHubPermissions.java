@@ -1,6 +1,5 @@
 package me.Aubli.IPlayHub;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 
@@ -20,6 +19,6 @@ public enum IPlayHubPermissions {
     }
     
     public static void deny(Player player) {
-	player.sendMessage(ChatColor.DARK_RED + "You do not have enough Permissions to do that!");
+	IPlayHubMessages.sendMessage(player, IPlayHubMessages.no_permission);
     }
 }
