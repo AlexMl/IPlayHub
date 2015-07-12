@@ -12,6 +12,7 @@ import me.Aubli.IPlayHub.Listener.SignListener;
 import me.Aubli.IPlayHub.Listener.WeatherListener;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.util.Logger.PluginOutput;
@@ -19,9 +20,19 @@ import org.util.Logger.PluginOutput;
 
 public class IPlayHub extends JavaPlugin {
     
+    /*TODO:
+     * -messages
+     * -tps permissions check
+     * -add spawn to tp list
+     * -donater things
+     * -welcome message
+     */
+    
     private static IPlayHub instance;
     
     private static PluginOutput logger;
+    
+    private static final String prefix = ChatColor.YELLOW + "[" + ChatColor.AQUA + "IPH" + ChatColor.YELLOW + "]" + ChatColor.RESET;
     
     private boolean debugMode;
     private int logLevel;
@@ -52,6 +63,10 @@ public class IPlayHub extends JavaPlugin {
     
     public static PluginOutput getPluginLogger() {
 	return logger;
+    }
+    
+    public static String getPluginPrefix() {
+	return prefix;
     }
     
     public File getWorldFile() {

@@ -1,10 +1,12 @@
 package me.Aubli.IPlayHub.Listener;
 
+import me.Aubli.IPlayHub.IPlayHub;
 import me.Aubli.IPlayHub.IPlayHubPermissions;
 import me.Aubli.IPlayHub.Hub.HubManager;
 import me.Aubli.IPlayHub.Hub.WorldHub;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,7 +24,7 @@ public class SignListener implements Listener {
     public void onSignChange(SignChangeEvent event) {
 	Player eventPlayer = event.getPlayer();
 	
-	if (event.getLine(0).equalsIgnoreCase("[iph]")) {
+	if (ChatColor.stripColor(event.getLine(0)).equalsIgnoreCase(ChatColor.stripColor(IPlayHub.getPluginPrefix()))) {
 	    if (eventPlayer.hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
 		if (!event.getLine(1).isEmpty() && !event.getLine(2).isEmpty()) {
 		    String worldName = event.getLine(1);
@@ -31,7 +33,7 @@ public class SignListener implements Listener {
 		    
 		    if (hub != null) {
 			if (hub.getTeleportPoint(tpName) != null) { // TODO colors
-			    event.setLine(0, "[IPH]");
+			    event.setLine(0, IPlayHub.getPluginPrefix());
 			    event.setLine(1, "Hub Teleport");
 			    event.setLine(2, tpName);
 			    event.setLine(3, worldName);
@@ -63,7 +65,7 @@ public class SignListener implements Listener {
 	    if (event.getClickedBlock().getState() instanceof Sign) {
 		Sign eventSign = (Sign) event.getClickedBlock().getState();
 		
-		if (eventSign.getLine(0).equalsIgnoreCase("[iph]")) { // TODO prefix
+		if (ChatColor.stripColor(eventSign.getLine(0)).equalsIgnoreCase(ChatColor.stripColor(IPlayHub.getPluginPrefix()))) { // TODO prefix
 		    event.setCancelled(true);
 		    
 		    if (eventPlayer.hasPermission(IPlayHubPermissions.Teleport.getPermissionNode())) {
@@ -74,6 +76,7 @@ public class SignListener implements Listener {
 			if (hub != null) {
 			    if (hub.getTeleportPoint(tpName) != null) {
 				if (hub.isEnabled()) {
+				    // INFO not checked permissions from hubPoint
 				    eventPlayer.teleport(hub.getTeleportPoint(tpName).getLocation(), TeleportCause.PLUGIN);
 				    return;
 				} else {
