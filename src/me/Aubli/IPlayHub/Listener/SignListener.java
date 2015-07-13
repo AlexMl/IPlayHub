@@ -1,8 +1,10 @@
 package me.Aubli.IPlayHub.Listener;
 
 import me.Aubli.IPlayHub.IPlayHub;
+import me.Aubli.IPlayHub.IPlayHubMessages;
 import me.Aubli.IPlayHub.IPlayHubPermissions;
 import me.Aubli.IPlayHub.Hub.HubManager;
+import me.Aubli.IPlayHub.Hub.HubPoint;
 import me.Aubli.IPlayHub.Hub.WorldHub;
 
 import org.bukkit.Bukkit;
@@ -76,8 +78,12 @@ public class SignListener implements Listener {
 			if (hub != null) {
 			    if (hub.getTeleportPoint(tpName) != null) {
 				if (hub.isEnabled()) {
-				    // INFO not checked permissions from hubPoint
-				    eventPlayer.teleport(hub.getTeleportPoint(tpName).getLocation(), TeleportCause.PLUGIN);
+				    HubPoint hubPoint = hub.getTeleportPoint(tpName);
+				    if (eventPlayer.hasPermission(hubPoint.getPermNode())) {
+					eventPlayer.teleport(hubPoint.getLocation(), TeleportCause.PLUGIN);
+				    } else {
+					IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.no_permission);
+				    }
 				    return;
 				} else {
 				    // Message
