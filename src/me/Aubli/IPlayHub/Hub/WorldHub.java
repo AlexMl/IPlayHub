@@ -23,7 +23,7 @@ public class WorldHub {
     
     public WorldHub(HubConfig config, Location spawnLoc) {
 	this.config = config;
-	this.hubSpawn = new HubPoint(spawnLoc.clone(), "spawn");
+	this.hubSpawn = new HubPoint(spawnLoc.clone(), "SPAWN");
 	this.teleportLocations = new ArrayList<HubPoint>();
 	saveConfig();
     }
@@ -38,7 +38,7 @@ public class WorldHub {
     private void loadConfig() {
 	ConfigurationSection config = getConfig().getConfigSection();
 	
-	this.hubSpawn = new HubPoint(parseLocation(config.getString("location.spawn")), "spawn");
+	this.hubSpawn = new HubPoint(parseLocation(config.getString("location.spawn")), "SPAWN");
 	
 	ConfigurationSection tpSection = config.getConfigurationSection("location.teleport");
 	this.teleportLocations = new ArrayList<HubPoint>();
