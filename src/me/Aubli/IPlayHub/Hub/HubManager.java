@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.Aubli.IPlayHub.IPlayHub;
+import me.Aubli.IPlayHub.HubExceptions.WorldAlreadyInitializedException;
+import me.Aubli.IPlayHub.HubExceptions.WorldNotLoadedException;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -35,8 +37,11 @@ public class HubManager {
 		try {
 		    WorldHub worldHub = new WorldHub(config.getConfigurationSection("worlds." + worlds));
 		    this.hubList.add(worldHub);
-		} catch (Exception e) {
+		} catch (WorldNotLoadedException e) {
 		    // TODO logger
+		    e.printStackTrace();
+		} catch (Exception e) {
+		    // TODO: handle exception
 		    e.printStackTrace();
 		}
 	    }
@@ -58,7 +63,7 @@ public class HubManager {
 	    this.hubList.add(hub);
 	    return hub;
 	} else {
-	    throw new Exception("World already initialized!");
+	    throw new WorldAlreadyInitializedException();
 	    // TODO logger
 	}
 	
@@ -72,8 +77,8 @@ public class HubManager {
 	    config.save(IPlayHub.getHub().getWorldFile());
 	    return section;
 	} else {
+	    throw new WorldAlreadyInitializedException();
 	    // TODO logger
-	    throw new Exception("Only one hub per World");
 	}
     }
     

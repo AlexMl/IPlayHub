@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import me.Aubli.IPlayHub.IPlayHub;
+import me.Aubli.IPlayHub.HubExceptions.WorldNotLoadedException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -42,7 +43,11 @@ public class HubConfig {
 	    this.configSection = configSection;
 	    loadSettings(configSection);
 	} else {
-	    throw new Exception();
+	    throw new Exception("Config section not initialized!");
+	}
+	
+	if (getWorld() == null) {
+	    throw new WorldNotLoadedException();
 	}
     }
     
@@ -77,7 +82,7 @@ public class HubConfig {
 	try {
 	    configConfiguration.save(IPlayHub.getHub().getWorldFile());
 	} catch (IOException e) {
-	    // TODO Auto-generated catch block
+	    // TODO Logger
 	    e.printStackTrace();
 	}
 	// TODO fireworks
