@@ -57,9 +57,9 @@ public class HubManager {
 	
     }
     
-    public WorldHub registerHub(World world, Location spawnLocation) throws Exception {
-	if (getHub(world) == null) {
-	    WorldHub hub = new WorldHub(new HubConfig(world, createSection(world)), spawnLocation.clone());
+    public WorldHub registerHub(String hubName, World world, Location spawnLocation) throws Exception {
+	if (getHub(world) == null && getHub(hubName) == null) {
+	    WorldHub hub = new WorldHub(new HubConfig(hubName, world, createSection(world)), spawnLocation.clone());
 	    this.hubList.add(hub);
 	    return hub;
 	} else {
@@ -89,6 +89,15 @@ public class HubManager {
     public WorldHub getHub(World world) {
 	for (WorldHub hub : this.hubList) {
 	    if (hub.getWorld().equals(world)) {
+		return hub;
+	    }
+	}
+	return null;
+    }
+    
+    public WorldHub getHub(String hubName) {
+	for (WorldHub hub : this.hubList) {
+	    if (hub.getName().equals(hubName)) {
 		return hub;
 	    }
 	}

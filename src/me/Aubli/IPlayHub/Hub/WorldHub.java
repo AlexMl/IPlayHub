@@ -86,6 +86,10 @@ public class WorldHub {
 	return getConfig().getWorld();
     }
     
+    public String getName() {
+	return getConfig().getHubName();
+    }
+    
     public HubPoint getSpawnPoint() {
 	return this.hubSpawn;
     }

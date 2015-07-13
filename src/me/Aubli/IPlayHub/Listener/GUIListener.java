@@ -29,7 +29,7 @@ public class GUIListener implements Listener {
 	
 	ItemStack eventItem = event.getCurrentItem();
 	
-	if (invName.equals("Teleporters by World!") || invName.equals("Available Teleporters!")) {
+	if (invName.equals("Teleporters by Hub!") || invName.equals("Available Teleporters!")) {
 	    event.setCancelled(true);
 	    
 	    if (event.getSlot() == -999) {
@@ -39,8 +39,8 @@ public class GUIListener implements Listener {
 	    
 	    if (eventItem != null && eventItem.getType() != Material.AIR) {
 		if (eventPlayer.hasPermission(IPlayHubPermissions.Teleport.getPermissionNode())) {
-		    if (invName.equals("Teleporters by World!")) {
-			WorldHub hub = HubManager.getManager().getHub(Bukkit.getWorld(eventItem.getItemMeta().getDisplayName()));
+		    if (invName.equals("Teleporters by Hub!")) {
+			WorldHub hub = HubManager.getManager().getHub(eventItem.getItemMeta().getDisplayName());
 			
 			if (hub != null && hub.isEnabled()) {
 			    Inventory hubInv = Bukkit.createInventory(eventPlayer, (int) (Math.ceil(hub.getTeleportPoints().size() / 9.0) * 9), "Available Teleporters!");
@@ -50,7 +50,7 @@ public class GUIListener implements Listener {
 			    spawnMeta.setDisplayName("Spawn");
 			    
 			    List<String> lore = new ArrayList<String>();
-			    lore.add("Teleport to Spawn in " + hub.getWorld().getName() + "!");
+			    lore.add("Teleport to Hub in " + hub.getName() + "!");
 			    spawnMeta.setLore(lore);
 			    spawn.setItemMeta(spawnMeta);
 			    hubInv.addItem(spawn);
@@ -62,7 +62,7 @@ public class GUIListener implements Listener {
 				    pointItemMeta.setDisplayName(point.getName());
 				    
 				    lore.clear();
-				    lore.add("Teleport to " + point.getName() + " in " + hub.getWorld().getName() + "!");
+				    lore.add("Teleport to " + point.getName() + " in " + hub.getName() + "!");
 				    pointItemMeta.setLore(lore);
 				    pointItem.setItemMeta(pointItemMeta);
 				    hubInv.addItem(pointItem);
@@ -73,9 +73,9 @@ public class GUIListener implements Listener {
 			    return;
 			}
 		    } else if (invName.equals("Available Teleporters!")) {
-			String worldName = eventItem.getItemMeta().getLore().get(0).split("in ")[1].replace("!", "");
+			String hubName = eventItem.getItemMeta().getLore().get(0).split("in ")[1].replace("!", "");
 			
-			WorldHub hub = HubManager.getManager().getHub(Bukkit.getWorld(worldName));
+			WorldHub hub = HubManager.getManager().getHub(hubName);
 			if (hub != null && hub.isEnabled()) {
 			    HubPoint tpPoint = hub.getTeleportPoint(eventItem.getItemMeta().getDisplayName());
 			    if (tpPoint != null) {

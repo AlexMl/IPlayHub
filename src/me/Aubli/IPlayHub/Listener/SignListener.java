@@ -7,7 +7,6 @@ import me.Aubli.IPlayHub.Hub.HubManager;
 import me.Aubli.IPlayHub.Hub.HubPoint;
 import me.Aubli.IPlayHub.Hub.WorldHub;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -29,9 +28,9 @@ public class SignListener implements Listener {
 	if (checkPrefix(event.getLine(0))) {
 	    if (eventPlayer.hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
 		if (!event.getLine(1).isEmpty()) {
-		    String worldName = event.getLine(1);
+		    String hubName = event.getLine(1);
 		    String tpName = event.getLine(2);
-		    WorldHub hub = HubManager.getManager().getHub(Bukkit.getWorld(worldName));
+		    WorldHub hub = HubManager.getManager().getHub(hubName);
 		    
 		    if (hub != null) {
 			HubPoint tpPoint = event.getLine(2).isEmpty() ? hub.getSpawnPoint() : hub.getTeleportPoint(tpName);
@@ -40,13 +39,12 @@ public class SignListener implements Listener {
 			    event.setLine(0, IPlayHub.getPluginPrefix());
 			    event.setLine(1, "Hub Teleport");
 			    event.setLine(2, tpPoint.getName());
-			    event.setLine(3, worldName);
-			    // Message
+			    event.setLine(3, hubName);
 			} else {
 			    IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleport_does_not_exist, tpName);
 			}
 		    } else {
-			IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.no_hub_in_world, worldName);
+			IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.no_hub_with_name, hubName);
 		    }
 		} else {
 		    // Message
@@ -73,9 +71,9 @@ public class SignListener implements Listener {
 		    event.setCancelled(true);
 		    
 		    if (eventPlayer.hasPermission(IPlayHubPermissions.Teleport.getPermissionNode())) {
-			String worldName = eventSign.getLine(3);
+			String hubName = eventSign.getLine(3);
 			String tpName = eventSign.getLine(2);
-			WorldHub hub = HubManager.getManager().getHub(Bukkit.getWorld(worldName));
+			WorldHub hub = HubManager.getManager().getHub(hubName);
 			
 			if (hub != null) {
 			    HubPoint hubPoint = tpName.equals(hub.getSpawnPoint().getName()) ? hub.getSpawnPoint() : hub.getTeleportPoint(tpName);
@@ -94,7 +92,7 @@ public class SignListener implements Listener {
 				IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleport_does_not_exist, tpName);
 			    }
 			} else {
-			    IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.no_hub_in_world, worldName);
+			    IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.no_hub_with_name, hubName);
 			}
 		    } else {
 			IPlayHubPermissions.deny(eventPlayer);

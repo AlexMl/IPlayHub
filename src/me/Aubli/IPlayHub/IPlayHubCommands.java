@@ -44,19 +44,6 @@ public class IPlayHubCommands implements CommandExecutor {
 	    }
 	    
 	    if (args.length == 1) {
-		if (args[0].equalsIgnoreCase("init")) {
-		    if (playerSender.hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
-			try {
-			    WorldHub hub = HubManager.getManager().registerHub(playerSender.getWorld(), playerSender.getLocation().clone());
-			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.hub_created, hub.getWorld().getName());
-			} catch (Exception e) {
-			    playerSender.sendMessage("Error: " + e.getMessage());// Message
-			}
-		    } else {
-			commandDenied(playerSender);
-		    }
-		    return true;
-		}
 		
 		if (args[0].equalsIgnoreCase("spawn")) {
 		    WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
@@ -75,16 +62,16 @@ public class IPlayHubCommands implements CommandExecutor {
 		
 		if (args[0].equalsIgnoreCase("teleport") || args[0].equalsIgnoreCase("tp")) {
 		    if (playerSender.hasPermission(IPlayHubPermissions.Teleport.getPermissionNode())) {
-			Inventory hubInv = Bukkit.createInventory(playerSender, (int) (Math.ceil(HubManager.getManager().getWorldHubs().length / 9.0) * 9), "Teleporters by World!");
-			// TODO add spawn locations to list, as first
+			Inventory hubInv = Bukkit.createInventory(playerSender, (int) (Math.ceil(HubManager.getManager().getWorldHubs().length / 9.0) * 9), "Teleporters by Hub!");
+			
 			for (WorldHub hub : HubManager.getManager().getWorldHubs()) {
 			    if (hub.getTeleportPoints().size() > 0) {
 				ItemStack hubItem = new ItemStack(Material.CHEST);
 				ItemMeta hubItemMeta = hubItem.getItemMeta();
-				hubItemMeta.setDisplayName(hub.getWorld().getName());
+				hubItemMeta.setDisplayName(hub.getName());
 				
 				List<String> lore = new ArrayList<String>();
-				lore.add("Teleport Points of world " + hub.getWorld().getName() + "!");
+				lore.add("Teleport Points of hub " + hub.getName() + "!");
 				hubItemMeta.setLore(lore);
 				hubItem.setItemMeta(hubItemMeta);
 				hubInv.addItem(hubItem);
@@ -120,14 +107,31 @@ public class IPlayHubCommands implements CommandExecutor {
 			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.no_hub_in_world, playerSender.getWorld().getName());
 			}
 			return true;
+		    } else {
+			commandDenied(playerSender);
+			return true;
 		    }
-		} else {
-		    commandDenied(playerSender);
-		    return true;
 		}
+		
+		printHelp(playerSender);
 	    }
 	    
 	    if (args.length == 2) {
+		
+		if (args[0].equalsIgnoreCase("init")) {
+		    if (playerSender.hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
+			try {
+			    WorldHub hub = HubManager.getManager().registerHub(args[1], playerSender.getWorld(), playerSender.getLocation().clone());
+			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.hub_created, args[1], hub.getWorld().getName());
+			} catch (Exception e) {
+			    playerSender.sendMessage("Error: " + e.getMessage());// Message
+			}
+		    } else {
+			commandDenied(playerSender);
+		    }
+		    return true;
+		}
+		
 		if (args[0].equalsIgnoreCase("tpadd")) {
 		    if (playerSender.hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
 			WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
@@ -211,7 +215,7 @@ public class IPlayHubCommands implements CommandExecutor {
 	player.sendMessage("|" + dashs + " " + version + " " + dashs);
 	
 	player.sendMessage("| /iplayhub");
-	player.sendMessage("| /iplayhub init");
+	player.sendMessage("| /iplayhub init [HubName]");
 	player.sendMessage("| /iplayhub spawn");
 	player.sendMessage("| /iplayhub tps");
 	player.sendMessage("| /iplayhub tp");
