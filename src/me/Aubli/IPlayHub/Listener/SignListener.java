@@ -26,25 +26,27 @@ public class SignListener implements Listener {
     public void onSignChange(SignChangeEvent event) {
 	Player eventPlayer = event.getPlayer();
 	
-	if (ChatColor.stripColor(event.getLine(0)).equalsIgnoreCase(ChatColor.stripColor(IPlayHub.getPluginPrefix()))) {
+	if (checkPrefix(event.getLine(0))) {
 	    if (eventPlayer.hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
-		if (!event.getLine(1).isEmpty() && !event.getLine(2).isEmpty()) {
+		if (!event.getLine(1).isEmpty()) {
 		    String worldName = event.getLine(1);
 		    String tpName = event.getLine(2);
 		    WorldHub hub = HubManager.getManager().getHub(Bukkit.getWorld(worldName));
 		    
 		    if (hub != null) {
-			if (hub.getTeleportPoint(tpName) != null) { // TODO colors
+			HubPoint tpPoint = event.getLine(2).isEmpty() ? hub.getSpawnPoint() : hub.getTeleportPoint(tpName);
+			
+			if (tpPoint != null) { // TODO colors
 			    event.setLine(0, IPlayHub.getPluginPrefix());
 			    event.setLine(1, "Hub Teleport");
-			    event.setLine(2, tpName);
+			    event.setLine(2, tpPoint.getName());
 			    event.setLine(3, worldName);
 			    // Message
 			} else {
-			    // Message
+			    IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleport_does_not_exist, tpName);
 			}
 		    } else {
-			// Message
+			IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.no_hub_in_world, worldName);
 		    }
 		} else {
 		    // Message
@@ -67,7 +69,7 @@ public class SignListener implements Listener {
 	    if (event.getClickedBlock().getState() instanceof Sign) {
 		Sign eventSign = (Sign) event.getClickedBlock().getState();
 		
-		if (ChatColor.stripColor(eventSign.getLine(0)).equalsIgnoreCase(ChatColor.stripColor(IPlayHub.getPluginPrefix()))) { // TODO prefix
+		if (checkPrefix(eventSign.getLine(0))) {
 		    event.setCancelled(true);
 		    
 		    if (eventPlayer.hasPermission(IPlayHubPermissions.Teleport.getPermissionNode())) {
@@ -76,9 +78,9 @@ public class SignListener implements Listener {
 			WorldHub hub = HubManager.getManager().getHub(Bukkit.getWorld(worldName));
 			
 			if (hub != null) {
-			    if (hub.getTeleportPoint(tpName) != null) {
+			    HubPoint hubPoint = tpName.equals(hub.getSpawnPoint().getName()) ? hub.getSpawnPoint() : hub.getTeleportPoint(tpName);
+			    if (hubPoint != null) {
 				if (hub.isEnabled()) {
-				    HubPoint hubPoint = hub.getTeleportPoint(tpName);
 				    if (eventPlayer.hasPermission(hubPoint.getPermNode())) {
 					eventPlayer.teleport(hubPoint.getLocation(), TeleportCause.PLUGIN);
 				    } else {
@@ -86,13 +88,13 @@ public class SignListener implements Listener {
 				    }
 				    return;
 				} else {
-				    // Message
+				    IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.hub_disabled);
 				}
 			    } else {
-				// Message
+				IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleport_does_not_exist, tpName);
 			    }
 			} else {
-			    // Message
+			    IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.no_hub_in_world, worldName);
 			}
 		    } else {
 			IPlayHubPermissions.deny(eventPlayer);
@@ -108,7 +110,7 @@ public class SignListener implements Listener {
 	if (event.getBlock().getState() instanceof Sign) {
 	    Sign eventSign = (Sign) event.getBlock().getState();
 	    
-	    if (eventSign.getLine(0).equalsIgnoreCase("[iph]")) { // TODO prefix
+	    if (checkPrefix(eventSign.getLine(0))) {
 		if (!event.getPlayer().hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
 		    event.setCancelled(true);
 		    IPlayHubPermissions.deny(event.getPlayer());
@@ -116,5 +118,9 @@ public class SignListener implements Listener {
 		}
 	    }
 	}
+    }
+    
+    private boolean checkPrefix(String signLine) {
+	return ChatColor.stripColor(signLine).equalsIgnoreCase(ChatColor.stripColor(IPlayHub.getPluginPrefix()));
     }
 }
