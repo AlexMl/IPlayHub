@@ -159,8 +159,13 @@ public class IPlayHubCommands implements CommandExecutor {
 			WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
 			
 			if (hub != null) {
-			    if (hub.getTeleportPoint(args[1]) != null) {
-				playerSender.teleport(hub.getTeleportPoint(args[1]).getLocation(), TeleportCause.PLUGIN);
+			    HubPoint tpPoint = hub.getTeleportPoint(args[1]);
+			    if (tpPoint != null) {
+				if (playerSender.hasPermission(tpPoint.getPermNode())) {
+				    playerSender.teleport(tpPoint.getLocation(), TeleportCause.PLUGIN);
+				} else {
+				    commandDenied(playerSender);
+				}
 			    } else {
 				IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.teleport_does_not_exist, args[1]);
 			    }
