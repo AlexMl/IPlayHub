@@ -3,6 +3,7 @@ package me.Aubli.IPlayHub.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.Aubli.IPlayHub.IPlayHubMessages;
 import me.Aubli.IPlayHub.IPlayHubPermissions;
 import me.Aubli.IPlayHub.Hub.HubManager;
 import me.Aubli.IPlayHub.Hub.HubPoint;
@@ -79,10 +80,12 @@ public class GUIListener implements Listener {
 			if (hub != null && hub.isEnabled()) {
 			    HubPoint tpPoint = hub.getTeleportPoint(eventItem.getItemMeta().getDisplayName());
 			    if (tpPoint != null) {
+				IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleporting);
 				eventPlayer.closeInventory();
 				eventPlayer.teleport(tpPoint.getLocation(), TeleportCause.PLUGIN);
 				return;
 			    } else if (eventItem.getItemMeta().getDisplayName().equals("Spawn") && eventItem.getType() == Material.MINECART) {
+				IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleporting);
 				eventPlayer.closeInventory();
 				eventPlayer.teleport(hub.getSpawnPoint().getLocation(), TeleportCause.PLUGIN);
 				return;
