@@ -65,12 +65,14 @@ public class PluginOutput {
     
     public void log(Class<?> senderClass, Level level, String message, boolean logMessage, boolean debugMessage, Exception e) {
 	
-	if (logMessage) {
+	if (logMessage || e != null || level.intValue() >= Level.WARNING.intValue()) {
 	    logData(senderClass, level, message, e);
 	}
 	
 	if (e != null) {
-	    this.log.log(Level.WARNING, message, e);
+	    this.log.log(Level.WARNING, message);
+	    this.log.log(Level.WARNING, e.toString());
+	    return;
 	}
 	
 	if (!debugMessage) {
