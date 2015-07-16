@@ -3,6 +3,7 @@ package me.Aubli.IPlayHub.Hub;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import me.Aubli.IPlayHub.IPlayHub;
 import me.Aubli.IPlayHub.HubExceptions.WorldAlreadyInitializedException;
@@ -51,8 +52,7 @@ public class HubManager {
 	try {
 	    config.save(IPlayHub.getHub().getWorldFile());
 	} catch (IOException e) {
-	    e.printStackTrace();
-	    // TODO logger
+	    IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Error while saving worldfile!", true, false, e);
 	}
 	
     }

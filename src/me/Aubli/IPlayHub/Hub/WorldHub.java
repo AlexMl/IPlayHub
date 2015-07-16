@@ -3,6 +3,7 @@ package me.Aubli.IPlayHub.Hub;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import me.Aubli.IPlayHub.IPlayHub;
 import me.Aubli.IPlayHub.IPlayHubPermissions;
@@ -64,8 +65,7 @@ public class WorldHub {
 	try {
 	    configConfiguration.save(IPlayHub.getHub().getWorldFile());
 	} catch (IOException e) {
-	    e.printStackTrace();
-	    // TODO log
+	    IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Error while saving worldconfiguration for hub " + getName() + " in world " + getWorld().getName() + "!", true, false, e);
 	}
     }
     

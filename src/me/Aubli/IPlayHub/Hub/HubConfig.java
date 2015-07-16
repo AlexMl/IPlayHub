@@ -2,6 +2,7 @@ package me.Aubli.IPlayHub.Hub;
 
 import java.io.IOException;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import me.Aubli.IPlayHub.IPlayHub;
 import me.Aubli.IPlayHub.HubExceptions.WorldNotLoadedException;
@@ -82,8 +83,7 @@ public class HubConfig {
 	try {
 	    configConfiguration.save(IPlayHub.getHub().getWorldFile());
 	} catch (IOException e) {
-	    // TODO Logger
-	    e.printStackTrace();
+	    IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Error while saving hubsettings for hub " + getHubName() + " in world " + getWorld().getName() + "!", true, false, e);
 	}
     }
     
