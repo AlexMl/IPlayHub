@@ -3,6 +3,8 @@ package org.util.Logger;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -104,7 +106,11 @@ public class PluginOutput {
 	    FileWriter writer = new FileWriter(this.logFile, true);
 	    
 	    if (exception != null) {
-		message += "\n" + exception.toString();
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		exception.printStackTrace(pw);
+		
+		message += "\n" + sw.toString();
 	    }
 	    
 	    writer.write("[" + formatter.format(currentTime) + "] [" + senderClass.getSimpleName() + "] [" + level.getName() + "] " + message);
