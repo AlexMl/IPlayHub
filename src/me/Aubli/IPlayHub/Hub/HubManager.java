@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import me.Aubli.IPlayHub.IPlayHub;
+import me.Aubli.IPlayHub.HubExceptions.HubAlreadyExistsException;
 import me.Aubli.IPlayHub.HubExceptions.WorldAlreadyInitializedException;
 import me.Aubli.IPlayHub.HubExceptions.WorldNotLoadedException;
 
@@ -34,16 +35,14 @@ public class HubManager {
 	
 	if (config.get("worlds") != null) {
 	    
-	    for (String worlds : config.getConfigurationSection("worlds").getKeys(false)) {
+	    for (String world : config.getConfigurationSection("worlds").getKeys(false)) {
 		try {
-		    WorldHub worldHub = new WorldHub(config.getConfigurationSection("worlds." + worlds));
+		    WorldHub worldHub = new WorldHub(config.getConfigurationSection("worlds." + world));
 		    this.hubList.add(worldHub);
 		} catch (WorldNotLoadedException e) {
-		    // TODO logger
-		    e.printStackTrace();
+		    IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Worldhub in world " + world + " can not be loaded! " + e.getMessage(), true, false, e);
 		} catch (Exception e) {
-		    // TODO: handle exception
-		    e.printStackTrace();
+		    IPlayHub.getPluginLogger().log(getClass(), Level.SEVERE, "Worldhub in world " + world + " can not be loaded! " + e.getMessage(), true, false, e);
 		}
 	    }
 	    
@@ -58,15 +57,21 @@ public class HubManager {
     }
     
     public WorldHub registerHub(String hubName, World world, Location spawnLocation) throws Exception {
-	if (getHub(world) == null && getHub(hubName) == null) {
-	    WorldHub hub = new WorldHub(new HubConfig(hubName, world, createSection(world)), spawnLocation.clone());
-	    this.hubList.add(hub);
-	    return hub;
+	if (getHub(world) == null) {
+	    if (getHub(hubName) == null) {
+		WorldHub hub = new WorldHub(new HubConfig(hubName, world, createSection(world)), spawnLocation.clone());
+		this.hubList.add(hub);
+		return hub;
+	    } else {
+		Exception e = new HubAlreadyExistsException();
+		IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Can not register new Hub with name " + hubName + " in world " + world.getName() + "! " + e.getMessage(), true, false, e);
+		throw e;
+	    }
 	} else {
-	    throw new WorldAlreadyInitializedException();
-	    // TODO logger
+	    Exception e = new WorldAlreadyInitializedException();
+	    IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Can not register new Hub with name " + hubName + " in world " + world.getName() + "! " + e.getMessage(), true, false, e);
+	    throw e;
 	}
-	
     }
     
     private ConfigurationSection createSection(World world) throws Exception {
@@ -77,8 +82,9 @@ public class HubManager {
 	    config.save(IPlayHub.getHub().getWorldFile());
 	    return section;
 	} else {
-	    throw new WorldAlreadyInitializedException();
-	    // TODO logger
+	    Exception e = new WorldAlreadyInitializedException();
+	    IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Can not create config section. " + world.getName() + " already exists!", true, false, e);
+	    throw e;
 	}
     }
     
