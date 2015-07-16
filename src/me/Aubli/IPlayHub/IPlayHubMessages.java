@@ -12,6 +12,7 @@ public enum IPlayHubMessages {
     no_teleport_points(ChatColor.RED + "There are no teleport positions available for you!"),
     hub_created(ChatColor.GREEN + "Hub " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " in world " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " successfully created!"),
     hub_disabled(ChatColor.RED + "The Hub is currently offline!"),
+    hub_created_error(ChatColor.RED + "Hub " + ChatColor.GOLD + "%s" + ChatColor.RED + " in world " + ChatColor.GOLD + "%s" + ChatColor.RED + " could not be registered! %s"),
     available_points(ChatColor.GOLD + "Your available teleport positions:"),
     teleport_added(ChatColor.GREEN + "Teleport point " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " added!"),
     teleport_already_exists(ChatColor.RED + "Teleport point " + ChatColor.GOLD + "%s" + ChatColor.RED + " already exists!"),

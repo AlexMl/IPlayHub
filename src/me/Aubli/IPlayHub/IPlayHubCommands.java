@@ -124,7 +124,8 @@ public class IPlayHubCommands implements CommandExecutor {
 			    WorldHub hub = HubManager.getManager().registerHub(args[1], playerSender.getWorld(), playerSender.getLocation().clone());
 			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.hub_created, args[1], hub.getWorld().getName());
 			} catch (Exception e) {
-			    playerSender.sendMessage("Error: " + e.getMessage());// Message
+			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.hub_created_error, args[1], playerSender.getWorld().getName(), e.getMessage());
+			    playerSender.sendMessage("Error: " + e.getMessage());
 			}
 		    } else {
 			commandDenied(playerSender);
