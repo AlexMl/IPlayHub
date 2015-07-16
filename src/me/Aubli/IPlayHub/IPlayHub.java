@@ -23,10 +23,7 @@ public class IPlayHub extends JavaPlugin {
     
     /*TODO:
      * -messages
-     * -tps permissions check
-     * -add spawn to tp list
      * -donater things
-     * -welcome message
      */
     
     private static IPlayHub instance;
@@ -40,6 +37,7 @@ public class IPlayHub extends JavaPlugin {
     
     // Config values
     private static boolean joinAtHub;
+    private static boolean shootFirework;
     private static World mainWorld;
     private static String welcomeMessage;
     
@@ -83,6 +81,10 @@ public class IPlayHub extends JavaPlugin {
 	return joinAtHub;
     }
     
+    public static boolean isShootFirework() {
+	return shootFirework;
+    }
+    
     public static World getMainWorld() {
 	return mainWorld;
     }
@@ -105,6 +107,7 @@ public class IPlayHub extends JavaPlugin {
 	
 	getConfig().addDefault("config.mainWorld", Bukkit.getWorlds().get(0).getName());
 	getConfig().addDefault("config.joinAtHub", true);
+	getConfig().addDefault("config.shootFireworkAtJoin", true);
 	getConfig().addDefault("config.welcomeMessage", ChatColor.BOLD + "" + ChatColor.GOLD + "WELCOME!");
 	
 	this.debugMode = getConfig().getBoolean("config.debugMode");
@@ -112,6 +115,7 @@ public class IPlayHub extends JavaPlugin {
 	
 	mainWorld = Bukkit.getWorld(getConfig().getString("config.mainWorld"));
 	joinAtHub = getConfig().getBoolean("config.joinAtHub");
+	shootFirework = getConfig().getBoolean("config.shootFireworkAtJoin");
 	welcomeMessage = getConfig().getString("config.welcomeMessage");
 	
 	getConfig().options().copyDefaults(true);
