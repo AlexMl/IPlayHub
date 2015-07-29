@@ -35,10 +35,10 @@ public class SignListener implements Listener {
 		    if (hub != null) {
 			HubPoint tpPoint = event.getLine(2).isEmpty() ? hub.getSpawnPoint() : hub.getTeleportPoint(tpName);
 			
-			if (tpPoint != null) { // TODO colors
-			    event.setLine(0, IPlayHub.getPluginPrefix());
+			if (tpPoint != null) {
+			    event.setLine(0, ChatColor.GOLD + "[" + ChatColor.AQUA + "IPH" + ChatColor.GOLD + "]");
 			    event.setLine(1, "Hub Teleport");
-			    event.setLine(2, tpPoint.getName());
+			    event.setLine(2, ChatColor.DARK_GREEN + tpPoint.getName());
 			    event.setLine(3, hubName);
 			} else {
 			    IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleport_does_not_exist, tpName);
@@ -47,7 +47,7 @@ public class SignListener implements Listener {
 			IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.no_hub_with_name, hubName);
 		    }
 		} else {
-		    // Message
+		    IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.wrong_sign_layout);
 		}
 	    } else {
 		IPlayHubPermissions.deny(eventPlayer);
@@ -70,9 +70,10 @@ public class SignListener implements Listener {
 		if (checkPrefix(eventSign.getLine(0))) {
 		    event.setCancelled(true);
 		    
+		    // TODO Maybe update sign
 		    if (eventPlayer.hasPermission(IPlayHubPermissions.Teleport.getPermissionNode())) {
-			String hubName = eventSign.getLine(3);
-			String tpName = eventSign.getLine(2);
+			String hubName = ChatColor.stripColor(eventSign.getLine(3));
+			String tpName = ChatColor.stripColor(eventSign.getLine(2));
 			WorldHub hub = HubManager.getManager().getHub(hubName);
 			
 			if (hub != null) {
