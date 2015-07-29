@@ -22,7 +22,6 @@ import org.util.Logger.PluginOutput;
 public class IPlayHub extends JavaPlugin {
     
     /*TODO:
-     * -messages
      * -donater things
      */
     
