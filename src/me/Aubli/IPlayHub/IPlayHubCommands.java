@@ -8,6 +8,7 @@ import me.Aubli.IPlayHub.Hub.HubPoint;
 import me.Aubli.IPlayHub.Hub.WorldHub;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -211,24 +212,24 @@ public class IPlayHubCommands implements CommandExecutor {
     }
     
     private void printHelp(Player player) {
-	// TODO colors
 	String version = IPlayHub.getHub().getDescription().getName() + " v" + IPlayHub.getHub().getDescription().getVersion() + " Help";
 	int dashAmount = 53 - (1 + 2 + version.length());
+	
 	String dashs = "";
 	for (int i = 0; i < Math.floor(dashAmount / 2); i++) {
 	    dashs += "-";
 	}
 	
-	player.sendMessage("|" + dashs + " " + version + " " + dashs);
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + dashs + " " + ChatColor.YELLOW + version + " " + ChatColor.AQUA + dashs);
 	
-	player.sendMessage("| /iplayhub");
-	player.sendMessage("| /iplayhub init [HubName]");
-	player.sendMessage("| /iplayhub spawn");
-	player.sendMessage("| /iplayhub tps");
-	player.sendMessage("| /iplayhub tp");
-	player.sendMessage("| /iplayhub tp [name]");
-	player.sendMessage("| /iplayhub tpadd [name]");
-	player.sendMessage("| /iplayhub tpadd [name] [permission]");
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub");
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub init [HubName]");
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub spawn");
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tps");
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tp");
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tp [name]");
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tpadd [name]");
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tpadd [name] [permission]");
 	
     }
     
