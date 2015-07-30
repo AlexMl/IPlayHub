@@ -66,17 +66,15 @@ public class IPlayHubCommands implements CommandExecutor {
 			Inventory hubInv = Bukkit.createInventory(playerSender, (int) (Math.ceil(HubManager.getManager().getWorldHubs().length / 9.0) * 9), "Teleporters by Hub!");
 			
 			for (WorldHub hub : HubManager.getManager().getWorldHubs()) {
-			    if (hub.getTeleportPoints().size() > 0) {
-				ItemStack hubItem = new ItemStack(Material.CHEST);
-				ItemMeta hubItemMeta = hubItem.getItemMeta();
-				hubItemMeta.setDisplayName(hub.getName());
-				
-				List<String> lore = new ArrayList<String>();
-				lore.add("Teleport Points of hub " + hub.getName() + "!");
-				hubItemMeta.setLore(lore);
-				hubItem.setItemMeta(hubItemMeta);
-				hubInv.addItem(hubItem);
-			    }
+			    ItemStack hubItem = new ItemStack(Material.CHEST);
+			    ItemMeta hubItemMeta = hubItem.getItemMeta();
+			    hubItemMeta.setDisplayName(hub.getName());
+			    
+			    List<String> lore = new ArrayList<String>();
+			    lore.add("Teleport Points of hub " + hub.getName() + "!");
+			    hubItemMeta.setLore(lore);
+			    hubItem.setItemMeta(hubItemMeta);
+			    hubInv.addItem(hubItem);
 			}
 			playerSender.closeInventory();
 			playerSender.openInventory(hubInv);
