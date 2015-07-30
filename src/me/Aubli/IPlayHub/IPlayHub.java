@@ -23,6 +23,9 @@ public class IPlayHub extends JavaPlugin {
     
     /*TODO:
      * -donater things
+     * -logger messages create, delete, ...
+     * -list commands
+     * -relaod config command
      */
     
     private static IPlayHub instance;

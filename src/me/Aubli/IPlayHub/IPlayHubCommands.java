@@ -154,6 +154,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		    }
 		}
 		
+		// INFO: world/hub specific
 		if (args[0].equalsIgnoreCase("tp")) {
 		    if (playerSender.hasPermission(IPlayHubPermissions.Teleport.getPermissionNode())) {
 			WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
