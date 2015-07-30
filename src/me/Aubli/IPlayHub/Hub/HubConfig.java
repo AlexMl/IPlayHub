@@ -30,6 +30,7 @@ public class HubConfig {
 	
 	this.configSection = configSection;
 	this.world = world;
+	this.hubName = hubName;
 	
 	if (configSection.get("enabled") != null) {
 	    loadSettings(configSection);
