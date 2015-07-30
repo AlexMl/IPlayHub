@@ -18,6 +18,10 @@ public enum IPlayHubPermissions {
 	return this.permission;
     }
     
+    public static boolean hasPermission(Player player, IPlayHubPermissions perm) {
+	return player.hasPermission(perm.getPermissionNode());
+    }
+    
     public static void deny(Player player) {
 	IPlayHubMessages.sendMessage(player, IPlayHubMessages.no_permission);
     }

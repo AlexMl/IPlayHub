@@ -62,7 +62,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		}
 		
 		if (args[0].equalsIgnoreCase("teleport") || args[0].equalsIgnoreCase("tp")) {
-		    if (playerSender.hasPermission(IPlayHubPermissions.Teleport.getPermissionNode())) {
+		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Teleport)) {
 			Inventory hubInv = Bukkit.createInventory(playerSender, (int) (Math.ceil(HubManager.getManager().getWorldHubs().length / 9.0) * 9), "Teleporters by Hub!");
 			
 			for (WorldHub hub : HubManager.getManager().getWorldHubs()) {
@@ -86,7 +86,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		}
 		
 		if (args[0].equalsIgnoreCase("tps")) {
-		    if (playerSender.hasPermission(IPlayHubPermissions.Teleport.getPermissionNode())) {
+		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Teleport)) {
 			WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
 			
 			if (hub != null) {
@@ -118,7 +118,7 @@ public class IPlayHubCommands implements CommandExecutor {
 	    if (args.length == 2) {
 		
 		if (args[0].equalsIgnoreCase("init")) {
-		    if (playerSender.hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
+		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Admin)) {
 			try {
 			    WorldHub hub = HubManager.getManager().registerHub(args[1], playerSender.getWorld(), playerSender.getLocation().clone());
 			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.hub_created, args[1], hub.getWorld().getName());
@@ -133,7 +133,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		}
 		
 		if (args[0].equalsIgnoreCase("tpadd")) {
-		    if (playerSender.hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
+		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Admin)) {
 			WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
 			if (hub != null) {
 			    HubPoint point = hub.addTeleportPoint(playerSender.getLocation().clone(), args[1]);
@@ -156,7 +156,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		
 		// INFO: world/hub specific
 		if (args[0].equalsIgnoreCase("tp")) {
-		    if (playerSender.hasPermission(IPlayHubPermissions.Teleport.getPermissionNode())) {
+		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Teleport)) {
 			WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
 			
 			if (hub != null) {
@@ -184,7 +184,7 @@ public class IPlayHubCommands implements CommandExecutor {
 	    
 	    if (args.length == 3) {
 		if (args[0].equalsIgnoreCase("tpadd")) {
-		    if (playerSender.hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
+		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Admin)) {
 			WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
 			if (hub != null) {
 			    HubPoint point = hub.addTeleportPoint(playerSender.getLocation().clone(), args[1], args[2]);

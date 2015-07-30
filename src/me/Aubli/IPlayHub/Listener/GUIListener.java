@@ -39,7 +39,7 @@ public class GUIListener implements Listener {
 	    }
 	    
 	    if (eventItem != null && eventItem.getType() != Material.AIR) {
-		if (eventPlayer.hasPermission(IPlayHubPermissions.Teleport.getPermissionNode())) {
+		if (IPlayHubPermissions.hasPermission(eventPlayer, IPlayHubPermissions.Teleport)) {
 		    if (invName.equals("Teleporters by Hub!")) {
 			WorldHub hub = HubManager.getManager().getHub(eventItem.getItemMeta().getDisplayName());
 			

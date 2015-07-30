@@ -26,7 +26,7 @@ public class SignListener implements Listener {
 	Player eventPlayer = event.getPlayer();
 	
 	if (checkPrefix(event.getLine(0))) {
-	    if (eventPlayer.hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
+	    if (IPlayHubPermissions.hasPermission(eventPlayer, IPlayHubPermissions.Admin)) {
 		if (!event.getLine(1).isEmpty()) {
 		    String hubName = event.getLine(1);
 		    String tpName = event.getLine(2);
@@ -71,7 +71,7 @@ public class SignListener implements Listener {
 		    event.setCancelled(true);
 		    
 		    // TODO Maybe update sign
-		    if (eventPlayer.hasPermission(IPlayHubPermissions.Teleport.getPermissionNode())) {
+		    if (IPlayHubPermissions.hasPermission(eventPlayer, IPlayHubPermissions.Teleport)) {
 			String hubName = ChatColor.stripColor(eventSign.getLine(3));
 			String tpName = ChatColor.stripColor(eventSign.getLine(2));
 			WorldHub hub = HubManager.getManager().getHub(hubName);
@@ -111,7 +111,7 @@ public class SignListener implements Listener {
 	    Sign eventSign = (Sign) event.getBlock().getState();
 	    
 	    if (checkPrefix(eventSign.getLine(0))) {
-		if (!event.getPlayer().hasPermission(IPlayHubPermissions.Admin.getPermissionNode())) {
+		if (IPlayHubPermissions.hasPermission(event.getPlayer(), IPlayHubPermissions.Admin)) {
 		    event.setCancelled(true);
 		    IPlayHubPermissions.deny(event.getPlayer());
 		    return;
