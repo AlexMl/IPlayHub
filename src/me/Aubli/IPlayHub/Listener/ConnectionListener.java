@@ -32,6 +32,7 @@ public class ConnectionListener implements Listener {
 	    
 	    if (hub != null) {
 		eventPlayer.teleport(hub.getSpawnPoint().getLocation(), TeleportCause.PLUGIN);
+		// eventPlayer.sendTitle("title", "subtitle"); // TODO Use but message from config with enable
 	    } else {
 		// TODO log
 	    }
