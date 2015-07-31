@@ -39,6 +39,15 @@ public class HubPoint implements Comparable<HubPoint> {
     }
     
     @Override
+    public boolean equals(Object obj) {
+	if (obj instanceof HubPoint) {
+	    HubPoint other = (HubPoint) obj;
+	    return (other.getName().equals(getName())) && (other.getLocation().equals(getLocation()));
+	}
+	return false;
+    }
+    
+    @Override
     public String toString() {
 	return getClass().getSimpleName() + "[" + getName() + ", " + getLocation().getBlockX() + ":" + getLocation().getBlockY() + ":" + getLocation().getBlockZ() + ", " + getPermNode() + "]";
     }
