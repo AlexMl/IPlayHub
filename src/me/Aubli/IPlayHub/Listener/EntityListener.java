@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 
 public class EntityListener implements Listener {
@@ -61,6 +62,18 @@ public class EntityListener implements Listener {
 		}
 	    } else {
 		this.isPvPDamage = false;
+	    }
+	}
+    }
+    
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+	
+	WorldHub hub = HubManager.getManager().getHub(event.getRespawnLocation().getWorld());
+	
+	if (hub != null && hub.isEnabled()) {
+	    if (event.getPlayer().getBedSpawnLocation() == null || !event.getPlayer().getBedSpawnLocation().getWorld().equals(hub.getWorld())) {
+		event.setRespawnLocation(hub.getSpawnPoint().getLocation());
 	    }
 	}
     }
