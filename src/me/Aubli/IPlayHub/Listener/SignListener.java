@@ -80,7 +80,7 @@ public class SignListener implements Listener {
 			    HubPoint hubPoint = tpName.equals(hub.getSpawnPoint().getName()) ? hub.getSpawnPoint() : hub.getTeleportPoint(tpName);
 			    if (hubPoint != null) {
 				if (hub.isEnabled()) {
-				    if (eventPlayer.hasPermission(hubPoint.getPermNode())) {
+				    if (eventPlayer.hasPermission(hubPoint.getPermNode()) || hubPoint.equals(hub.getSpawnPoint())) {
 					IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleporting);
 					eventPlayer.teleport(hubPoint.getLocation(), TeleportCause.PLUGIN);
 				    } else {

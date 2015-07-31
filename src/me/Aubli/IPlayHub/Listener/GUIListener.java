@@ -44,17 +44,19 @@ public class GUIListener implements Listener {
 			WorldHub hub = HubManager.getManager().getHub(eventItem.getItemMeta().getDisplayName());
 			
 			if (hub != null && hub.isEnabled()) {
-			    Inventory hubInv = Bukkit.createInventory(eventPlayer, (int) (Math.ceil((hub.getTeleportPoints().length + 1) / 9.0) * 9), "Available Teleporters!");
-			    
-			    ItemStack spawn = new ItemStack(Material.MINECART);
-			    ItemMeta spawnMeta = spawn.getItemMeta();
-			    spawnMeta.setDisplayName("Spawn");
-			    
+			    Inventory hubInv = Bukkit.createInventory(eventPlayer, (int) (Math.ceil((hub.getTeleportPoints().length + (eventPlayer.hasPermission(hub.getSpawnPoint().getPermNode()) ? 1 : 0)) / 9.0) * 9), "Available Teleporters!");
 			    List<String> lore = new ArrayList<String>();
-			    lore.add("Teleport to Hub in " + hub.getName() + "!");
-			    spawnMeta.setLore(lore);
-			    spawn.setItemMeta(spawnMeta);
-			    hubInv.addItem(spawn);
+			    
+			    if (eventPlayer.hasPermission(hub.getSpawnPoint().getPermNode())) {
+				ItemStack spawn = new ItemStack(Material.MINECART);
+				ItemMeta spawnMeta = spawn.getItemMeta();
+				spawnMeta.setDisplayName("Spawn");
+				
+				lore.add("Teleport to Hub in " + hub.getName() + "!");
+				spawnMeta.setLore(lore);
+				spawn.setItemMeta(spawnMeta);
+				hubInv.addItem(spawn);
+			    }
 			    
 			    for (HubPoint point : hub.getTeleportPoints()) {
 				if (eventPlayer.hasPermission(point.getPermNode())) {

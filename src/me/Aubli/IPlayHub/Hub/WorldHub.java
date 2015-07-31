@@ -14,6 +14,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 
 public class WorldHub {
@@ -39,7 +40,7 @@ public class WorldHub {
     private void loadConfig() {
 	ConfigurationSection config = getConfig().getConfigSection();
 	
-	this.hubSpawn = new HubPoint(parseLocation(config.getString("location.spawn")), "SPAWN");
+	this.hubSpawn = new HubPoint(parseLocation(config.getString("location.spawn")), "SPAWN", config.getString("location.spawnPermission"));
 	
 	ConfigurationSection tpSection = config.getConfigurationSection("location.teleport");
 	this.teleportLocations = new ArrayList<HubPoint>();
@@ -56,6 +57,7 @@ public class WorldHub {
 	FileConfiguration configConfiguration = YamlConfiguration.loadConfiguration(IPlayHub.getHub().getWorldFile());
 	ConfigurationSection configSection = configConfiguration.getConfigurationSection("worlds." + getConfig().getWorld().getName());
 	configSection.set("location.spawn", getLocationString(getSpawnPoint()));
+	configSection.set("location.spawnPermission", getSpawnPoint().getPermNode());
 	
 	for (HubPoint tpPoint : getTeleportPoints()) {
 	    configSection.set("location.teleport." + tpPoint.getName() + ".location", getLocationString(tpPoint));
@@ -103,6 +105,28 @@ public class WorldHub {
 	
 	Arrays.sort(points);
 	return points;
+    }
+    
+    public HubPoint[] getApplicableHubPoints(Player player) {
+	List<HubPoint> allowedPoints = new ArrayList<HubPoint>();
+	
+	for (HubPoint point : this.teleportLocations) {
+	    if (player.hasPermission(point.getPermNode())) {
+		allowedPoints.add(point);
+	    }
+	}
+	
+	if (player.hasPermission(getSpawnPoint().getPermNode())) {
+	    allowedPoints.add(getSpawnPoint());
+	}
+	
+	HubPoint[] hubPoints = new HubPoint[allowedPoints.size()];
+	for (HubPoint point : allowedPoints) {
+	    hubPoints[allowedPoints.indexOf(point)] = point;
+	}
+	
+	Arrays.sort(hubPoints);
+	return hubPoints;
     }
     
     public HubPoint getTeleportPoint(String name) {

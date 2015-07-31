@@ -71,20 +71,22 @@ public class IPlayHubCommands implements CommandExecutor {
 		    return true;
 		}
 		
-		if (args[0].equalsIgnoreCase("teleport") || args[0].equalsIgnoreCase("tp")) {
+		if (args[0].equalsIgnoreCase("tp")) {
 		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Teleport)) {
 			Inventory hubInv = Bukkit.createInventory(playerSender, (int) (Math.ceil(HubManager.getManager().getWorldHubs().length / 9.0) * 9), "Teleporters by Hub!");
 			
 			for (WorldHub hub : HubManager.getManager().getWorldHubs()) {
-			    ItemStack hubItem = new ItemStack(Material.CHEST);
-			    ItemMeta hubItemMeta = hubItem.getItemMeta();
-			    hubItemMeta.setDisplayName(hub.getName());
-			    
-			    List<String> lore = new ArrayList<String>();
-			    lore.add("Teleport Points of hub " + hub.getName() + "!");
-			    hubItemMeta.setLore(lore);
-			    hubItem.setItemMeta(hubItemMeta);
-			    hubInv.addItem(hubItem);
+			    if (hub.getApplicableHubPoints(playerSender).length > 0) {
+				ItemStack hubItem = new ItemStack(Material.CHEST);
+				ItemMeta hubItemMeta = hubItem.getItemMeta();
+				hubItemMeta.setDisplayName(hub.getName());
+				
+				List<String> lore = new ArrayList<String>();
+				lore.add("Teleport Points of hub " + hub.getName() + "!");
+				hubItemMeta.setLore(lore);
+				hubItem.setItemMeta(hubItemMeta);
+				hubInv.addItem(hubItem);
+			    }
 			}
 			playerSender.closeInventory();
 			playerSender.openInventory(hubInv);
