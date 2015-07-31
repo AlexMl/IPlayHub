@@ -24,6 +24,7 @@ public class HubConfig {
     
     private boolean playerVsPlayer;		// Enable pvp in world
     private boolean starving;			// Enable hunger in world
+    private boolean allowDamage;		// Enable Damage in world
     private boolean weatherChanges;		// Enable weather change in world
     
     public HubConfig(String hubName, World world, ConfigurationSection configSection) {
@@ -57,6 +58,7 @@ public class HubConfig {
 	this.enabled = true;
 	this.playerVsPlayer = false;
 	this.starving = false;
+	this.allowDamage = true;
 	this.weatherChanges = true;
     }
     
@@ -67,6 +69,7 @@ public class HubConfig {
 	
 	this.playerVsPlayer = config.getBoolean("settings.pvp");
 	this.starving = config.getBoolean("settings.hunger");
+	this.allowDamage = config.getBoolean("settings.allowDamage");
 	this.weatherChanges = config.getBoolean("settings.weatherActivity");
     }
     
@@ -79,6 +82,7 @@ public class HubConfig {
 	
 	configSection.set("settings.pvp", isPlayerVsPlayer());
 	configSection.set("settings.hunger", isStarving());
+	configSection.set("settings.allowDamage", isPlayerVsPlayer());
 	configSection.set("settings.weatherActivity", isWeatherChanges());
 	
 	try {
@@ -106,6 +110,10 @@ public class HubConfig {
     
     public boolean isPlayerVsPlayer() {
 	return this.playerVsPlayer;
+    }
+    
+    public boolean isAllowDamage() {
+	return this.allowDamage;
     }
     
     public boolean isStarving() {
