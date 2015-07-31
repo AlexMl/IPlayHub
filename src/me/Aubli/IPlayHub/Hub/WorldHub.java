@@ -2,6 +2,7 @@ package me.Aubli.IPlayHub.Hub;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -93,8 +94,15 @@ public class WorldHub {
 	return this.hubSpawn;
     }
     
-    public List<HubPoint> getTeleportPoints() {
-	return this.teleportLocations;
+    public HubPoint[] getTeleportPoints() {
+	HubPoint[] points = new HubPoint[this.teleportLocations.size()];
+	
+	for (HubPoint point : this.teleportLocations) {
+	    points[this.teleportLocations.indexOf(point)] = point;
+	}
+	
+	Arrays.sort(points);
+	return points;
     }
     
     public HubPoint getTeleportPoint(String name) {

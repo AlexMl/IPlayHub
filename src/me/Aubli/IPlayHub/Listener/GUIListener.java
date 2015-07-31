@@ -44,7 +44,7 @@ public class GUIListener implements Listener {
 			WorldHub hub = HubManager.getManager().getHub(eventItem.getItemMeta().getDisplayName());
 			
 			if (hub != null && hub.isEnabled()) {
-			    Inventory hubInv = Bukkit.createInventory(eventPlayer, (int) (Math.ceil((hub.getTeleportPoints().size() + 1) / 9.0) * 9), "Available Teleporters!");
+			    Inventory hubInv = Bukkit.createInventory(eventPlayer, (int) (Math.ceil((hub.getTeleportPoints().length + 1) / 9.0) * 9), "Available Teleporters!");
 			    
 			    ItemStack spawn = new ItemStack(Material.MINECART);
 			    ItemMeta spawnMeta = spawn.getItemMeta();

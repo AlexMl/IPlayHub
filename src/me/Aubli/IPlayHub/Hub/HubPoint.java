@@ -5,7 +5,7 @@ import me.Aubli.IPlayHub.IPlayHubPermissions;
 import org.bukkit.Location;
 
 
-public class HubPoint {
+public class HubPoint implements Comparable<HubPoint> {
     
     private Location location;
     private String name;
@@ -31,6 +31,11 @@ public class HubPoint {
     
     public String getPermNode() {
 	return this.permNode;
+    }
+    
+    @Override
+    public int compareTo(HubPoint o) {
+	return getName().compareToIgnoreCase(o.getName());
     }
     
     @Override
