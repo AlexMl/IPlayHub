@@ -1,7 +1,8 @@
 name: IPlayHub
 description: Simple Hub plugin
 author: Aubli
-version: 0.0.9
+version: 0.0.10
+load: POSTWORLD
 
 main: me.Aubli.IPlayHub.IPlayHub
 
