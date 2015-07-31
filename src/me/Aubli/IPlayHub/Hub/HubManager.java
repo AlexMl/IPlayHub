@@ -10,6 +10,8 @@ import me.Aubli.IPlayHub.HubExceptions.HubAlreadyExistsException;
 import me.Aubli.IPlayHub.HubExceptions.WorldAlreadyInitializedException;
 import me.Aubli.IPlayHub.HubExceptions.WorldNotLoadedException;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -37,6 +39,7 @@ public class HubManager {
 	    
 	    for (String world : config.getConfigurationSection("worlds").getKeys(false)) {
 		try {
+		    Bukkit.broadcastMessage(ChatColor.RED + "worldkey: " + world);
 		    WorldHub worldHub = new WorldHub(config.getConfigurationSection("worlds." + world));
 		    this.hubList.add(worldHub);
 		} catch (WorldNotLoadedException e) {
@@ -54,6 +57,10 @@ public class HubManager {
 	    IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Error while saving worldfile!", true, false, e);
 	}
 	
+    }
+    
+    public void reloadHubs() {
+	initialize();
     }
     
     public WorldHub registerHub(String hubName, World world, Location spawnLocation) throws Exception {

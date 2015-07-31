@@ -61,6 +61,16 @@ public class IPlayHubCommands implements CommandExecutor {
 		    return true;
 		}
 		
+		if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
+		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Admin)) {
+			HubManager.getManager().reloadHubs();
+			IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.config_reloaded);
+		    } else {
+			commandDenied(playerSender);
+		    }
+		    return true;
+		}
+		
 		if (args[0].equalsIgnoreCase("teleport") || args[0].equalsIgnoreCase("tp")) {
 		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Teleport)) {
 			Inventory hubInv = Bukkit.createInventory(playerSender, (int) (Math.ceil(HubManager.getManager().getWorldHubs().length / 9.0) * 9), "Teleporters by Hub!");
@@ -124,7 +134,7 @@ public class IPlayHubCommands implements CommandExecutor {
 			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.hub_created, args[1], hub.getWorld().getName());
 			} catch (Exception e) {
 			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.hub_created_error, args[1], playerSender.getWorld().getName(), e.getMessage());
-			    playerSender.sendMessage("Error: " + e.getMessage());
+			    playerSender.sendMessage("Error: " + e.getMessage()); // TODO remove
 			}
 		    } else {
 			commandDenied(playerSender);
@@ -222,6 +232,8 @@ public class IPlayHubCommands implements CommandExecutor {
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + dashs + " " + ChatColor.YELLOW + version + " " + ChatColor.AQUA + dashs);
 	
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub");
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub help");
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub reload");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub init [HubName]");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub spawn");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tps");
