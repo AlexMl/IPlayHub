@@ -22,10 +22,11 @@ import org.util.Logger.PluginOutput;
 public class IPlayHub extends JavaPlugin {
     
     /*TODO:
-     * -donater things
+     * -donator things
      * -logger messages create, delete, ...
-     * -list commands
-     * -relaod config command
+     * -list command
+     * -delay world loads (see zvp)
+     * -tp specific delay
      */
     
     private static IPlayHub instance;
@@ -51,16 +52,23 @@ public class IPlayHub extends JavaPlugin {
     @Override
     public void onEnable() {
 	instance = this;
-	loadConfig();
 	
-	logger = new PluginOutput(getHub(), this.debugMode, this.logLevel);
-	
-	new HubManager();
-	
-	getCommand("iplayhub").setExecutor(new IPlayHubCommands());
-	
-	registerListeners();
-	logger.log(getClass(), "Plugin enabled!", false);
+	Bukkit.getScheduler().runTaskLater(getHub(), new Runnable() {
+	    
+	    @Override
+	    public void run() {
+		loadConfig();
+		
+		logger = new PluginOutput(getHub(), IPlayHub.this.debugMode, IPlayHub.this.logLevel);
+		
+		new HubManager();
+		
+		getCommand("iplayhub").setExecutor(new IPlayHubCommands());
+		
+		registerListeners();
+		logger.log(getClass(), "Plugin enabled!", false);
+	    }
+	}, 0 * 20L);
     }
     
     public static IPlayHub getHub() {
