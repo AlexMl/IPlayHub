@@ -18,6 +18,7 @@ public enum IPlayHubMessages {
     teleport_added(ChatColor.GREEN + "Teleport point " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " added!"),
     teleport_already_exists(ChatColor.RED + "Teleport point " + ChatColor.GOLD + "%s" + ChatColor.RED + " already exists!"),
     teleport_does_not_exist(ChatColor.RED + "Teleport point " + ChatColor.GOLD + "%s" + ChatColor.RED + " does not exist!"),
+    teleport_not_available(ChatColor.RED + "Teleport point " + ChatColor.GOLD + "%s" + ChatColor.RED + " is not available!"),
     teleporting(ChatColor.GREEN + "Teleporting ..."),
     config_reloaded(ChatColor.GREEN + "Config reloaded!"), ;
     

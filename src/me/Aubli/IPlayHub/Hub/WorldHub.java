@@ -7,14 +7,17 @@ import java.util.List;
 import java.util.logging.Level;
 
 import me.Aubli.IPlayHub.IPlayHub;
+import me.Aubli.IPlayHub.IPlayHubMessages;
 import me.Aubli.IPlayHub.IPlayHubPermissions;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class WorldHub {
@@ -47,7 +50,7 @@ public class WorldHub {
 	
 	if (tpSection != null) {
 	    for (String sectionKey : tpSection.getValues(false).keySet()) {
-		HubPoint point = new HubPoint(parseLocation(tpSection.getString(sectionKey + ".location")), sectionKey, tpSection.getString(sectionKey + ".permission"));
+		HubPoint point = new HubPoint(parseLocation(tpSection.getString(sectionKey + ".location")), sectionKey, tpSection.getInt(sectionKey + ".delay"), tpSection.getString(sectionKey + ".permission"));
 		this.teleportLocations.add(point);
 	    }
 	}
@@ -62,6 +65,7 @@ public class WorldHub {
 	for (HubPoint tpPoint : getTeleportPoints()) {
 	    configSection.set("location.teleport." + tpPoint.getName() + ".location", getLocationString(tpPoint));
 	    configSection.set("location.teleport." + tpPoint.getName() + ".permission", tpPoint.getPermNode());
+	    configSection.set("location.teleport." + tpPoint.getName() + ".delay", tpPoint.getDelay());
 	}
 	
 	try {
@@ -158,6 +162,26 @@ public class WorldHub {
 	} else {
 	    return null;
 	}
+    }
+    
+    public boolean teleport(final HubPoint point, final Player player) {
+	if (player.hasPermission(point.getPermNode())) {
+	    if (point != null && isEnabled()) {
+		Bukkit.getScheduler().runTaskLater(IPlayHub.getHub(), new Runnable() {
+		    
+		    @Override
+		    public void run() {
+			player.teleport(point.getLocation(), TeleportCause.PLUGIN);
+		    }
+		}, point.getDelay() * 20L);
+		return true;
+	    } else {
+		IPlayHubMessages.sendMessage(player, IPlayHubMessages.teleport_not_available);
+	    }
+	} else {
+	    IPlayHubPermissions.deny(player);
+	}
+	return false;
     }
     
     @Override

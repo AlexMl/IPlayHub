@@ -16,7 +16,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class SignListener implements Listener {
@@ -82,7 +81,7 @@ public class SignListener implements Listener {
 				if (hub.isEnabled()) {
 				    if (eventPlayer.hasPermission(hubPoint.getPermNode()) || hubPoint.equals(hub.getSpawnPoint())) {
 					IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleporting);
-					eventPlayer.teleport(hubPoint.getLocation(), TeleportCause.PLUGIN);
+					hub.teleport(hubPoint, eventPlayer);
 				    } else {
 					IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.no_permission);
 				    }

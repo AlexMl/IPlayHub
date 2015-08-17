@@ -14,7 +14,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,7 +36,7 @@ public class IPlayHubCommands implements CommandExecutor {
 	    if (args.length == 0) {
 		WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
 		if (hub != null) {
-		    playerSender.teleport(hub.getSpawnPoint().getLocation(), TeleportCause.PLUGIN);
+		    hub.teleport(hub.getSpawnPoint(), playerSender);
 		} else {
 		    printHelp(playerSender);
 		}
@@ -49,7 +48,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("spawn")) {
 		    WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
 		    if (hub != null) {
-			playerSender.teleport(hub.getSpawnPoint().getLocation(), TeleportCause.PLUGIN);
+			hub.teleport(hub.getSpawnPoint(), playerSender);
 		    } else {
 			IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.no_hub_in_world, playerSender.getWorld().getName());
 		    }
@@ -176,7 +175,7 @@ public class IPlayHubCommands implements CommandExecutor {
 			    if (tpPoint != null) {
 				if (playerSender.hasPermission(tpPoint.getPermNode())) {
 				    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.teleporting);
-				    playerSender.teleport(tpPoint.getLocation(), TeleportCause.PLUGIN);
+				    hub.teleport(tpPoint, playerSender);
 				} else {
 				    commandDenied(playerSender);
 				}

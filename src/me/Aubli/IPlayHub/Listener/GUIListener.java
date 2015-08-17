@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -84,12 +83,12 @@ public class GUIListener implements Listener {
 			    if (tpPoint != null) {
 				IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleporting);
 				eventPlayer.closeInventory();
-				eventPlayer.teleport(tpPoint.getLocation(), TeleportCause.PLUGIN);
+				hub.teleport(tpPoint, eventPlayer);
 				return;
 			    } else if (eventItem.getItemMeta().getDisplayName().equals("Spawn") && eventItem.getType() == Material.MINECART) {
 				IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleporting);
 				eventPlayer.closeInventory();
-				eventPlayer.teleport(hub.getSpawnPoint().getLocation(), TeleportCause.PLUGIN);
+				hub.teleport(hub.getSpawnPoint(), eventPlayer);
 				return;
 			    }
 			}
