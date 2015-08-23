@@ -1,6 +1,7 @@
 package me.Aubli.IPlayHub.Listener;
 
 import java.util.Random;
+import java.util.logging.Level;
 
 import me.Aubli.IPlayHub.IPlayHub;
 import me.Aubli.IPlayHub.Hub.HubManager;
@@ -34,7 +35,7 @@ public class ConnectionListener implements Listener {
 		eventPlayer.teleport(hub.getSpawnPoint().getLocation(), TeleportCause.PLUGIN);
 		// eventPlayer.sendTitle("title", "subtitle"); // TODO Use but message from config with enable
 	    } else {
-		// TODO log
+		IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Hub in world " + IPlayHub.getMainWorld().getName() + " is not initialized! Abort spawn teleportation!", true, false);
 	    }
 	}
 	
