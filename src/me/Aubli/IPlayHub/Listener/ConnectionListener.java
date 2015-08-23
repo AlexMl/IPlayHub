@@ -11,6 +11,7 @@ import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -19,6 +20,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 
@@ -41,6 +44,21 @@ public class ConnectionListener implements Listener {
 	
 	if (IPlayHub.isShootFirework()) {
 	    shootRandomFirework(eventPlayer.getLocation());
+	}
+	
+	if (IPlayHub.giveWelcomeBook()) {
+	    if (eventPlayer.getInventory().contains(Material.WRITTEN_BOOK)) {
+		for (ItemStack item : eventPlayer.getInventory().getContents()) {
+		    
+		    if (item != null && item.hasItemMeta() && item.getItemMeta() instanceof BookMeta) {
+			BookMeta itemMeta = (BookMeta) item.getItemMeta();
+			if (itemMeta.getTitle().equals(((BookMeta) IPlayHub.getWelcomeBook().getItemMeta()).getTitle())) {
+			    eventPlayer.getInventory().remove(item);
+			}
+		    }
+		}
+	    }
+	    eventPlayer.getInventory().addItem(IPlayHub.getWelcomeBook());
 	}
 	
 	eventPlayer.sendMessage(IPlayHub.getPluginPrefix() + " " + IPlayHub.getWelcomeMessage());
