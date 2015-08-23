@@ -105,7 +105,7 @@ public class IPlayHubCommands implements CommandExecutor {
 			    String tps = "";
 			    for (HubPoint tpPoint : hub.getTeleportPoints()) {
 				if (playerSender.hasPermission(tpPoint.getPermNode())) {
-				    tps += tpPoint.getName() + ", ";// TODO do it nicer, color?
+				    tps += ChatColor.RED + tpPoint.getName() + ChatColor.BLACK + ", ";// TODO do it nicer?
 				}
 			    }
 			    if (tps.length() > 0) {
