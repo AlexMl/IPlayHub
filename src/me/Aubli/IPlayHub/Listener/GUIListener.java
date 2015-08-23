@@ -3,6 +3,7 @@ package me.Aubli.IPlayHub.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.Aubli.IPlayHub.IPlayHub;
 import me.Aubli.IPlayHub.IPlayHubMessages;
 import me.Aubli.IPlayHub.IPlayHubPermissions;
 import me.Aubli.IPlayHub.Hub.HubManager;
@@ -10,6 +11,7 @@ import me.Aubli.IPlayHub.Hub.HubPoint;
 import me.Aubli.IPlayHub.Hub.WorldHub;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,8 +31,9 @@ public class GUIListener implements Listener {
 	
 	ItemStack eventItem = event.getCurrentItem();
 	
-	if (invName.equals("Teleporters by Hub!") || invName.equals("Available Teleporters!")) {
+	if (invName.startsWith(IPlayHub.getPluginPrefix())) {
 	    event.setCancelled(true);
+	    invName = invName.substring(IPlayHub.getPluginPrefix().length() + 1);
 	    
 	    if (event.getSlot() == -999) {
 		eventPlayer.closeInventory();
@@ -39,11 +42,11 @@ public class GUIListener implements Listener {
 	    
 	    if (eventItem != null && eventItem.getType() != Material.AIR) {
 		if (IPlayHubPermissions.hasPermission(eventPlayer, IPlayHubPermissions.Teleport)) {
-		    if (invName.equals("Teleporters by Hub!")) {
+		    if (invName.equals("Hubs")) {
 			WorldHub hub = HubManager.getManager().getHub(eventItem.getItemMeta().getDisplayName());
 			
 			if (hub != null && hub.isEnabled()) {
-			    Inventory hubInv = Bukkit.createInventory(eventPlayer, (int) (Math.ceil((hub.getTeleportPoints().length + (eventPlayer.hasPermission(hub.getSpawnPoint().getPermNode()) ? 1 : 0)) / 9.0) * 9), "Available Teleporters!");
+			    Inventory hubInv = Bukkit.createInventory(eventPlayer, (int) (Math.ceil((hub.getTeleportPoints().length + (eventPlayer.hasPermission(hub.getSpawnPoint().getPermNode()) ? 1 : 0)) / 9.0) * 9), IPlayHub.getPluginPrefix() + " Hub Points!");
 			    List<String> lore = new ArrayList<String>();
 			    
 			    if (eventPlayer.hasPermission(hub.getSpawnPoint().getPermNode())) {
@@ -51,7 +54,7 @@ public class GUIListener implements Listener {
 				ItemMeta spawnMeta = spawn.getItemMeta();
 				spawnMeta.setDisplayName("Spawn");
 				
-				lore.add("Teleport to Hub in " + hub.getName() + "!");
+				lore.add(ChatColor.LIGHT_PURPLE + "Teleport to Spawn in " + ChatColor.GOLD + hub.getName() + ChatColor.LIGHT_PURPLE + "!");
 				spawnMeta.setLore(lore);
 				spawn.setItemMeta(spawnMeta);
 				hubInv.addItem(spawn);
@@ -64,7 +67,7 @@ public class GUIListener implements Listener {
 				    pointItemMeta.setDisplayName(point.getName());
 				    
 				    lore.clear();
-				    lore.add("Teleport to " + point.getName() + " in " + hub.getName() + "!");
+				    lore.add(ChatColor.LIGHT_PURPLE + "Teleport to " + ChatColor.YELLOW + point.getName() + ChatColor.LIGHT_PURPLE + " in " + ChatColor.GOLD + hub.getName() + ChatColor.LIGHT_PURPLE + "!");
 				    pointItemMeta.setLore(lore);
 				    pointItem.setItemMeta(pointItemMeta);
 				    hubInv.addItem(pointItem);
@@ -74,8 +77,8 @@ public class GUIListener implements Listener {
 			    eventPlayer.openInventory(hubInv);
 			    return;
 			}
-		    } else if (invName.equals("Available Teleporters!")) {
-			String hubName = eventItem.getItemMeta().getLore().get(0).split("in ")[1].replace("!", "");
+		    } else if (invName.equals("Hub Points!")) {
+			String hubName = ChatColor.stripColor(eventItem.getItemMeta().getLore().get(0).split("in ")[1].replace("!", ""));
 			
 			WorldHub hub = HubManager.getManager().getHub(hubName);
 			if (hub != null && hub.isEnabled()) {

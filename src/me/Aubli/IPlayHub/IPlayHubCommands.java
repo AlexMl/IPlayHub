@@ -72,7 +72,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		
 		if (args[0].equalsIgnoreCase("tp")) {
 		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Teleport)) {
-			Inventory hubInv = Bukkit.createInventory(playerSender, (int) (Math.ceil(HubManager.getManager().getWorldHubs().length / 9.0) * 9), "Teleporters by Hub!");
+			Inventory hubInv = Bukkit.createInventory(playerSender, (int) (Math.ceil(HubManager.getManager().getWorldHubs().length / 9.0) * 9), IPlayHub.getPluginPrefix() + " Hubs");
 			
 			for (WorldHub hub : HubManager.getManager().getWorldHubs()) {
 			    if (hub.getApplicableHubPoints(playerSender).length > 0) {
@@ -81,7 +81,7 @@ public class IPlayHubCommands implements CommandExecutor {
 				hubItemMeta.setDisplayName(hub.getName());
 				
 				List<String> lore = new ArrayList<String>();
-				lore.add("Teleport Points of hub " + hub.getName() + "!");
+				lore.add(ChatColor.LIGHT_PURPLE + "Teleport Points of hub " + ChatColor.GOLD + hub.getName() + ChatColor.LIGHT_PURPLE + "!");
 				hubItemMeta.setLore(lore);
 				hubItem.setItemMeta(hubItemMeta);
 				hubInv.addItem(hubItem);
