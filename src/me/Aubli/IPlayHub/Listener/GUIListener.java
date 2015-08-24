@@ -139,6 +139,7 @@ public class GUIListener implements Listener {
 			    hub.saveConfig();
 			    
 			    // TODO remove book, send message
+			    // INFO signs will not change
 			} catch (Exception e) {
 			    e.printStackTrace();
 			    event.setCancelled(true);
