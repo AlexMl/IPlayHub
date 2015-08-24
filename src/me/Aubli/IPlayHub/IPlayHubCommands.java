@@ -178,7 +178,7 @@ public class IPlayHubCommands implements CommandExecutor {
 				BookMeta meta = (BookMeta) tpEditBook.getItemMeta();
 				
 				meta.setAuthor(IPlayHub.getPluginPrefix());
-				meta.setTitle("Edit " + tpPoint.getName());
+				meta.setTitle(hub.getName() + ":" + tpPoint.getName());
 				
 				meta.setPages("You can edit the Teleport " + ChatColor.DARK_GREEN + "'" + tpPoint.getName() + "'" + ChatColor.RESET + " using this Book.\n\nEach page contains a different Option:\n\n2. Teleport Name\n3. Teleport Permission\n4. Teleport Delay\n\nSign and Close it if you finished. The book name is not important!", "Teleport Name:\n" + tpPoint.getName(), "Permission:\n" + tpPoint.getPermNode(), "Delay (in Seconds):\n" + tpPoint.getDelay());
 				
