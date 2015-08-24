@@ -70,6 +70,22 @@ public class IPlayHubCommands implements CommandExecutor {
 		    return true;
 		}
 		
+		// TODO use table class
+		if (args[0].equalsIgnoreCase("list")) {
+		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Admin)) {
+			
+			playerSender.sendMessage(formatHeader("Hubs"));
+			playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.RESET + "Hubname" + ChatColor.YELLOW + ", " + ChatColor.RESET + "World" + ChatColor.YELLOW + ", " + ChatColor.RESET + "Enabled");
+			for (WorldHub hub : HubManager.getManager().getWorldHubs()) {
+			    // HubName, HubWorld, enabled,
+			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + hub.getName() + ChatColor.YELLOW + ", " + ChatColor.AQUA + hub.getWorld().getName() + ChatColor.YELLOW + ", " + ChatColor.AQUA + hub.isEnabled());
+			}
+		    } else {
+			commandDenied(playerSender);
+		    }
+		    return true;
+		}
+		
 		if (args[0].equalsIgnoreCase("tp")) {
 		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Teleport)) {
 			Inventory hubInv = Bukkit.createInventory(playerSender, (int) (Math.ceil(HubManager.getManager().getWorldHubs().length / 9.0) * 9), IPlayHub.getPluginPrefix() + " Hubs");
@@ -136,6 +152,28 @@ public class IPlayHubCommands implements CommandExecutor {
 			} catch (Exception e) {
 			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.hub_created_error, args[1], playerSender.getWorld().getName(), e.getMessage());
 			    playerSender.sendMessage("Error: " + e.getMessage()); // TODO remove
+			}
+		    } else {
+			commandDenied(playerSender);
+		    }
+		    return true;
+		}
+		
+		if (args[0].equalsIgnoreCase("status")) {
+		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Admin)) {
+			WorldHub hub = HubManager.getManager().getHub(args[1]);
+			
+			if (hub != null) {
+			    playerSender.sendMessage(formatHeader(hub.getName() + " Status"));
+			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Hubname: " + ChatColor.GREEN + hub.getName());
+			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "World: " + ChatColor.GREEN + hub.getWorld().getName());
+			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Enabled: " + ChatColor.GREEN + hub.isEnabled());
+			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Spawn: " + ChatColor.GREEN + hub.getSpawnPoint().getLocation().getBlockX() + ChatColor.YELLOW + ", " + ChatColor.GREEN + hub.getSpawnPoint().getLocation().getBlockY() + ChatColor.YELLOW + ", " + ChatColor.GREEN + hub.getSpawnPoint().getLocation().getBlockZ());
+			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Teleporters: " + ChatColor.GREEN + hub.getTeleportPoints().length);
+			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Allow Damage: " + ChatColor.GREEN + hub.getConfig().isAllowDamage());
+			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Allow PvP: " + ChatColor.GREEN + hub.getConfig().isPlayerVsPlayer());
+			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Allow hunger: " + ChatColor.GREEN + hub.getConfig().isStarving());
+			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Allow weather: " + ChatColor.GREEN + hub.getConfig().isWeatherChanges());
 			}
 		    } else {
 			commandDenied(playerSender);
@@ -226,24 +264,19 @@ public class IPlayHubCommands implements CommandExecutor {
     }
     
     private void printHelp(Player player) {
-	String version = IPlayHub.getHub().getDescription().getName() + " v" + IPlayHub.getHub().getDescription().getVersion() + " Help";
-	int dashAmount = 53 - (1 + 2 + version.length());
 	
-	String dashs = "";
-	for (int i = 0; i < Math.floor(dashAmount / 2); i++) {
-	    dashs += "-";
-	}
-	
-	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + dashs + " " + ChatColor.YELLOW + version + " " + ChatColor.AQUA + dashs);
+	player.sendMessage(formatHeader("Help"));
 	
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub help");
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub list");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub reload");
-	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub init [HubName]");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub spawn");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tps");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tp");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tp [name]");
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub status [HubName]");
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub init [HubName]");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tpadd [name]");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tpadd [name] [permission]");
 	
@@ -251,6 +284,18 @@ public class IPlayHubCommands implements CommandExecutor {
     
     private void commandDenied(Player player) {
 	IPlayHubPermissions.deny(player);
+    }
+    
+    private String formatHeader(String header) {
+	String headInfo = IPlayHub.getHub().getDescription().getName() + " v" + IPlayHub.getHub().getDescription().getVersion() + " " + header;
+	int dashAmount = 53 - (1 + 2 + headInfo.length());
+	
+	String dashs = "";
+	for (int i = 0; i < Math.floor(dashAmount / 2); i++) {
+	    dashs += "-";
+	}
+	
+	return "\n" + ChatColor.YELLOW + "|" + ChatColor.AQUA + dashs + " " + ChatColor.YELLOW + headInfo + " " + ChatColor.AQUA + dashs;
     }
     
 }

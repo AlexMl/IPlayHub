@@ -4,11 +4,14 @@ iplayhub.vip
 
 iplayhub.teleport 				'/iplayhub teleport' '/iplayhub tp' '/iph teleport' '/iph tp'
 -open teleport gui/teleport to location
+-teleport to hub spawn (except perm is modified)
 
 
 iplayhub.admin
 -initialize hub 				'/iplayhub init' '/iph init'
 -manage teleport locations
+-manage signs
+-status/list commands
 
 
 
@@ -16,6 +19,7 @@ Basic use(no permission node) includes:
 -teleport to hubspawn 			'/iplayhub spawn' '/iplayhub' '/iph spawn' '/iph'
 -use options set by config (weather, hunger, global pvp)
 -welcome message
+-welcome book
 
 
 
