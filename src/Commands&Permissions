@@ -9,6 +9,7 @@ iplayhub.teleport 				'/iplayhub teleport' '/iplayhub tp' '/iph teleport' '/iph 
 iplayhub.admin
 -initialize hub 				'/iplayhub init' '/iph init'
 -manage teleport locations
+-edit teleporters
 
 
 
