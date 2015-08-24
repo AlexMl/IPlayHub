@@ -272,6 +272,7 @@ public class IPlayHubCommands implements CommandExecutor {
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tps");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tp");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tp [name]");
+	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tpedit [name]");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tpadd [name]");
 	player.sendMessage(ChatColor.YELLOW + "|" + ChatColor.AQUA + " /iplayhub tpadd [name] [permission]");
 	
