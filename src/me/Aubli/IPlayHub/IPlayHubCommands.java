@@ -174,6 +174,8 @@ public class IPlayHubCommands implements CommandExecutor {
 			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Allow PvP: " + ChatColor.GREEN + hub.getConfig().isPlayerVsPlayer());
 			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Allow hunger: " + ChatColor.GREEN + hub.getConfig().isStarving());
 			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Allow weather: " + ChatColor.GREEN + hub.getConfig().isWeatherChanges());
+			} else {
+			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.no_hub_with_name, args[1]);
 			}
 		    } else {
 			commandDenied(playerSender);
