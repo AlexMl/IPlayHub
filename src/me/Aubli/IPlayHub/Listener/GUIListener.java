@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -103,4 +104,55 @@ public class GUIListener implements Listener {
 	    }
 	}
     }
+    
+    @EventHandler
+    public void onBookSign(PlayerEditBookEvent event) {
+	if (event.isSigning()) {
+	    Player eventPlayer = event.getPlayer();
+	    
+	    if (IPlayHubPermissions.hasPermission(eventPlayer, IPlayHubPermissions.Admin)) {
+		String tpName = event.getPreviousBookMeta().getTitle().split(":")[1];
+		String hubName = event.getPreviousBookMeta().getTitle().split(":")[0];
+		
+		WorldHub hub = HubManager.getManager().getHub(hubName);
+		
+		if (event.getPreviousBookMeta().getAuthor().equals(IPlayHub.getPluginPrefix()) && hub != null) {
+		    HubPoint tpPoint = hub.getTeleportPoint(tpName);
+		    
+		    if (tpPoint != null) {
+			List<String> pages = event.getNewBookMeta().getPages();
+			// System.out.println(event.getPreviousBookMeta().getAuthor());
+			// System.out.println(event.getPreviousBookMeta().getTitle());
+			// System.out.println(tpName);
+			try {
+			    String nameString = ChatColor.stripColor(pages.get(1)).replace("\n", "").replace("\r", "");
+			    String permissionString = ChatColor.stripColor(pages.get(2)).replace("\n", "").replace("\r", "");
+			    String delayString = ChatColor.stripColor(pages.get(3)).replace("\n", "").replace("\r", "");
+			    
+			    String newTPName = nameString.split(":")[1];
+			    String newTPPermission = permissionString.split(":")[1];
+			    int newTPDelay = Integer.parseInt(delayString.split(":")[1]);
+			    
+			    tpPoint.setName(newTPName);
+			    tpPoint.setPermNode(newTPPermission);
+			    tpPoint.setDelay(newTPDelay);
+			    hub.saveConfig();
+			    
+			    // TODO remove book, send message
+			} catch (Exception e) {
+			    e.printStackTrace();
+			    event.setCancelled(true);
+			}
+		    }
+		}
+		
+	    } else {
+		IPlayHubPermissions.deny(eventPlayer);
+		event.setCancelled(true);
+		eventPlayer.getInventory().clear(event.getSlot());
+		return;
+	    }
+	}
+    }
+    
 }
