@@ -121,9 +121,7 @@ public class GUIListener implements Listener {
 		    
 		    if (tpPoint != null) {
 			List<String> pages = event.getNewBookMeta().getPages();
-			// System.out.println(event.getPreviousBookMeta().getAuthor());
-			// System.out.println(event.getPreviousBookMeta().getTitle());
-			// System.out.println(tpName);
+			
 			try {
 			    String nameString = ChatColor.stripColor(pages.get(1)).replace("\n", "").replace("\r", "");
 			    String permissionString = ChatColor.stripColor(pages.get(2)).replace("\n", "").replace("\r", "");
@@ -133,13 +131,15 @@ public class GUIListener implements Listener {
 			    String newTPPermission = permissionString.split(":")[1];
 			    int newTPDelay = Integer.parseInt(delayString.split(":")[1]);
 			    
+			    // INFO signs will not change
 			    tpPoint.setName(newTPName);
 			    tpPoint.setPermNode(newTPPermission);
 			    tpPoint.setDelay(newTPDelay);
 			    hub.saveConfig();
 			    
-			    // TODO remove book, send message
-			    // INFO signs will not change
+			    eventPlayer.getInventory().clear(event.getSlot());
+			    IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.config_saved);
+			    return;
 			} catch (Exception e) {
 			    e.printStackTrace();
 			    event.setCancelled(true);
