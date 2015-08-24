@@ -16,6 +16,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 
@@ -158,6 +159,37 @@ public class IPlayHubCommands implements CommandExecutor {
 			} else {
 			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.no_hub_in_world, playerSender.getWorld().getName());
 			    return true;
+			}
+		    } else {
+			commandDenied(playerSender);
+			return true;
+		    }
+		}
+		
+		if (args[0].equalsIgnoreCase("tpedit")) {
+		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Admin)) {
+			WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
+			
+			if (hub != null) {
+			    HubPoint tpPoint = hub.getTeleportPoint(args[1]);
+			    if (tpPoint != null) {
+				
+				ItemStack tpEditBook = new ItemStack(Material.BOOK_AND_QUILL);
+				BookMeta meta = (BookMeta) tpEditBook.getItemMeta();
+				
+				meta.setAuthor(IPlayHub.getPluginPrefix());
+				meta.setTitle("Edit " + tpPoint.getName());
+				
+				meta.setPages("You can edit the Teleport " + ChatColor.DARK_GREEN + "'" + tpPoint.getName() + "'" + ChatColor.RESET + " using this Book.\n\nEach page contains a different Option:\n\n2. Teleport Name\n3. Teleport Permission\n4. Teleport Delay\n\nSign and Close it if you finished. The book name is not important!", "Teleport Name:\n" + tpPoint.getName(), "Permission:\n" + tpPoint.getPermNode(), "Delay (in Seconds):\n" + tpPoint.getDelay());
+				
+				tpEditBook.setItemMeta(meta);
+				playerSender.getInventory().addItem(tpEditBook);
+				
+			    } else {
+				IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.teleport_does_not_exist, args[1]);
+			    }
+			} else {
+			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.no_hub_in_world, playerSender.getWorld().getName());
 			}
 		    } else {
 			commandDenied(playerSender);
