@@ -100,7 +100,7 @@ public class HubManager {
     }
     
     public WorldHub getHub(World world) {
-	for (WorldHub hub : this.hubList) {
+	for (WorldHub hub : getWorldHubs()) {
 	    if (hub.getWorld().equals(world)) {
 		return hub;
 	    }
@@ -109,7 +109,7 @@ public class HubManager {
     }
     
     public WorldHub getHub(String hubName) {
-	for (WorldHub hub : this.hubList) {
+	for (WorldHub hub : getWorldHubs()) {
 	    if (hub.getName().equals(hubName)) {
 		return hub;
 	    }
