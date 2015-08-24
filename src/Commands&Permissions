@@ -12,6 +12,7 @@ iplayhub.admin
 -manage teleport locations
 -manage signs
 -status/list commands
+-edit teleporters
 
 
 

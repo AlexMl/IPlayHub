@@ -62,6 +62,8 @@ public class WorldHub {
 	configSection.set("location.spawn", getLocationString(getSpawnPoint()));
 	configSection.set("location.spawnPermission", getSpawnPoint().getPermNode());
 	
+	configSection.set("location.teleport", null);
+	
 	for (HubPoint tpPoint : getTeleportPoints()) {
 	    configSection.set("location.teleport." + tpPoint.getName() + ".location", getLocationString(tpPoint));
 	    configSection.set("location.teleport." + tpPoint.getName() + ".permission", tpPoint.getPermNode());

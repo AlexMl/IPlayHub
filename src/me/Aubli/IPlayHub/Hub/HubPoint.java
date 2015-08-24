@@ -47,6 +47,18 @@ public class HubPoint implements Comparable<HubPoint> {
 	return this.delay;
     }
     
+    public void setName(String name) {
+	this.name = name;
+    }
+    
+    public void setPermNode(String permNode) {
+	this.permNode = permNode;
+    }
+    
+    public void setDelay(int delay) {
+	this.delay = delay;
+    }
+    
     @Override
     public int compareTo(HubPoint o) {
 	return getName().compareToIgnoreCase(o.getName());
