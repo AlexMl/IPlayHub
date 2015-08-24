@@ -191,6 +191,8 @@ public class IPlayHubCommands implements CommandExecutor {
 			return true;
 		    }
 		}
+		
+		printHelp(playerSender);
 	    }
 	    
 	    if (args.length == 3) {
@@ -215,6 +217,8 @@ public class IPlayHubCommands implements CommandExecutor {
 			return true;
 		    }
 		}
+		
+		printHelp(playerSender);
 	    }
 	    
 	}
