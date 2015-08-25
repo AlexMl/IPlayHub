@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.util.InsertComment.CommentUtil;
 import org.util.Logger.PluginOutput;
 
 
@@ -138,7 +139,7 @@ public class IPlayHub extends JavaPlugin {
 	getConfig().addDefault("config.joinAtHub", true);
 	getConfig().addDefault("config.shootFireworkAtJoin", true);
 	getConfig().addDefault("config.welcomeMessage", ChatColor.BOLD + "" + ChatColor.GOLD + "WELCOME!");
-	getConfig().addDefault("config.giveWelcomeBook", true);
+	getConfig().addDefault("config.giveWelcomeBook", false);
 	
 	this.debugMode = getConfig().getBoolean("config.debugMode");
 	this.logLevel = getConfig().getInt("config.logLevel");
@@ -152,8 +153,9 @@ public class IPlayHub extends JavaPlugin {
 	getConfig().options().copyDefaults(true);
 	saveConfig();
 	
-	welcomeBook = new ItemStack(Material.WRITTEN_BOOK);
+	insertComments();
 	
+	welcomeBook = new ItemStack(Material.WRITTEN_BOOK);
 	BookMeta meta = (BookMeta) welcomeBook.getItemMeta();
 	
 	File bookFile = new File(getDataFolder(), "bookmeta.yml");
@@ -170,7 +172,6 @@ public class IPlayHub extends JavaPlugin {
 	    bookConfig.addDefault("book.pages.3", "...");
 	    
 	    bookConfig.options().copyDefaults(true);
-	    
 	    bookConfig.save(bookFile);
 	} catch (IOException e) {
 	    getPluginLogger().log(getClass(), Level.WARNING, "Error while saving bookconfig: " + e.getMessage(), true, false, e);
@@ -188,6 +189,17 @@ public class IPlayHub extends JavaPlugin {
 	meta.setAuthor(author);
 	meta.setPages(bookContent);
 	welcomeBook.setItemMeta(meta);
+    }
+    
+    private void insertComments() {
+	File configFile = new File(getDataFolder(), "config.yml");
+	
+	CommentUtil.insertComment(configFile, "debugMode", "Development settings for IplayHub. Set to false for normal use!");
+	CommentUtil.insertComment(configFile, "mainWorld", "The name of the world which is used as 'spawn' world.");
+	CommentUtil.insertComment(configFile, "joinAtHub", "If true, the player will be teleported to the spawn location of the hub from the mainWorld every time he joins the server.");
+	CommentUtil.insertComment(configFile, "shootFireworkAtJoin", "If true, random firework will be shot above the player.");
+	CommentUtil.insertComment(configFile, "welcomeMessage", "Message that the player receives on join!");
+	CommentUtil.insertComment(configFile, "giveWelcomeBook", "If true, the player receives a custom book.#The book can be set in the bookmeta.yml file!");
     }
     
     private void registerListeners() {
