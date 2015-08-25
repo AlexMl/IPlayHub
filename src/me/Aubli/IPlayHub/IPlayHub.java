@@ -34,7 +34,6 @@ public class IPlayHub extends JavaPlugin {
      * -donator things
      * -logger messages create, delete, ...
      * -list command
-     * -delay world loads (see zvp)
      * -tp specific delay
      */
     
@@ -48,6 +47,7 @@ public class IPlayHub extends JavaPlugin {
     
     private boolean debugMode;
     private int logLevel;
+    private int loadDelay;
     
     // Config values
     private static boolean joinAtHub;
@@ -65,22 +65,42 @@ public class IPlayHub extends JavaPlugin {
     public void onEnable() {
 	instance = this;
 	
-	Bukkit.getScheduler().runTaskLater(getHub(), new Runnable() {
+	loadConfig();
+	logger = new PluginOutput(getHub(), IPlayHub.this.debugMode, IPlayHub.this.logLevel);
+	
+	if (isServerReload()) {
+	    HubManager.getManager();
 	    
-	    @Override
-	    public void run() {
-		loadConfig();
+	    getCommand("iplayhub").setExecutor(new IPlayHubCommands());
+	    
+	    registerListeners();
+	    logger.log(getClass(), "Plugin enabled!", false);
+	} else {
+	    Bukkit.getScheduler().runTaskLater(getHub(), new Runnable() {
 		
-		logger = new PluginOutput(getHub(), IPlayHub.this.debugMode, IPlayHub.this.logLevel);
-		
-		new HubManager();
-		
-		getCommand("iplayhub").setExecutor(new IPlayHubCommands());
-		
-		registerListeners();
-		logger.log(getClass(), "Plugin enabled!", false);
+		@Override
+		public void run() {
+		    HubManager.getManager();
+		    
+		    getCommand("iplayhub").setExecutor(new IPlayHubCommands());
+		    
+		    registerListeners();
+		    logger.log(getClass(), "Plugin enabled!", false);
+		}
+	    }, this.loadDelay * 20L);
+	}
+    }
+    
+    private boolean isServerReload() {
+	StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+	
+	for (StackTraceElement ste : stackTrace) {
+	    if (ste.toString().contains("Bukkit.reload")) { // INFO: Magic String
+		return true;
 	    }
-	}, 0 * 20L);
+	}
+	
+	return false;
     }
     
     public static IPlayHub getHub() {
@@ -134,6 +154,7 @@ public class IPlayHub extends JavaPlugin {
 	
 	getConfig().addDefault("config.debugMode", false);
 	getConfig().addDefault("config.logLevel", Level.INFO.intValue());
+	getConfig().addDefault("config.configLoadDelay", 0);
 	
 	getConfig().addDefault("config.mainWorld", Bukkit.getWorlds().get(0).getName());
 	getConfig().addDefault("config.joinAtHub", true);
@@ -143,6 +164,7 @@ public class IPlayHub extends JavaPlugin {
 	
 	this.debugMode = getConfig().getBoolean("config.debugMode");
 	this.logLevel = getConfig().getInt("config.logLevel");
+	this.loadDelay = getConfig().getInt("config.configLoadDelay");
 	
 	mainWorld = Bukkit.getWorld(getConfig().getString("config.mainWorld"));
 	joinAtHub = getConfig().getBoolean("config.joinAtHub");
@@ -195,6 +217,7 @@ public class IPlayHub extends JavaPlugin {
 	File configFile = new File(getDataFolder(), "config.yml");
 	
 	CommentUtil.insertComment(configFile, "debugMode", "Development settings for IplayHub. Set to false for normal use!");
+	CommentUtil.insertComment(configFile, "configLoadDelay", "WorldManager plugins often load worlds only after the server has finished. If IPlayHub is using this worlds the plugin will encounter problems.#You can set a delay (in seconds) to avoid those issues.");
 	CommentUtil.insertComment(configFile, "mainWorld", "The name of the world which is used as 'spawn' world.");
 	CommentUtil.insertComment(configFile, "joinAtHub", "If true, the player will be teleported to the spawn location of the hub from the mainWorld every time he joins the server.");
 	CommentUtil.insertComment(configFile, "shootFireworkAtJoin", "If true, random firework will be shot above the player.");
