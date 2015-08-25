@@ -1,5 +1,6 @@
 package me.Aubli.IPlayHub.Listener;
 
+import me.Aubli.IPlayHub.IPlayHubMessages;
 import me.Aubli.IPlayHub.Hub.HubManager;
 import me.Aubli.IPlayHub.Hub.WorldHub;
 
@@ -30,9 +31,8 @@ public class EntityListener implements Listener {
 		if (hub != null) {
 		    if (hub.isEnabled()) {
 			if (!hub.getConfig().isPlayerVsPlayer()) {
-			    // TODO maybe log or message
-			    System.out.println("denie pvp");
 			    event.setCancelled(true);
+			    IPlayHubMessages.sendMessage((Player) event.getDamager(), IPlayHubMessages.pvp_denied);
 			    return;
 			}
 		    }
