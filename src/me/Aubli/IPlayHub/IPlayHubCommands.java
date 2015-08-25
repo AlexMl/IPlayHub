@@ -18,6 +18,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.util.TabText.TabText;
 
 
 public class IPlayHubCommands implements CommandExecutor {
@@ -71,16 +72,19 @@ public class IPlayHubCommands implements CommandExecutor {
 		    return true;
 		}
 		
-		// TODO use table class
 		if (args[0].equalsIgnoreCase("list")) {
 		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Admin)) {
 			
 			playerSender.sendMessage(formatHeader("Hubs"));
-			playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.RESET + "Hubname" + ChatColor.YELLOW + ", " + ChatColor.RESET + "World" + ChatColor.YELLOW + ", " + ChatColor.RESET + "Enabled");
+			String tableString = "Hubname`World`Enabled\n";
 			for (WorldHub hub : HubManager.getManager().getWorldHubs()) {
-			    // HubName, HubWorld, enabled,
-			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + hub.getName() + ChatColor.YELLOW + ", " + ChatColor.AQUA + hub.getWorld().getName() + ChatColor.YELLOW + ", " + ChatColor.AQUA + hub.isEnabled());
+			    // HubName, HubWorld, enabled
+			    tableString += ChatColor.AQUA + hub.getName() + "`" + hub.getWorld().getName() + "`" + hub.isEnabled() + "\n";
 			}
+			
+			TabText text = new TabText(tableString);
+			text.setTabs(18, 38);
+			playerSender.sendMessage(text.getPage(0, false));
 		    } else {
 			commandDenied(playerSender);
 		    }
