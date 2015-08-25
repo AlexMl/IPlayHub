@@ -32,9 +32,7 @@ public class IPlayHub extends JavaPlugin {
     
     /*TODO:
      * -donator things
-     * -logger messages create, delete, ...
-     * -list command
-     * -tp specific delay
+     * -add message for delayed tps
      */
     
     private static IPlayHub instance;
