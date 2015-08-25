@@ -23,9 +23,20 @@ public class HubManager {
     
     private List<WorldHub> hubList;
     
-    public HubManager() {
+    private HubManager() {
 	instance = this;
 	initialize();
+    }
+    
+    public static HubManager getManager() {
+	if (!isInitialized()) {
+	    new HubManager();
+	}
+	return instance;
+    }
+    
+    public static boolean isInitialized() {
+	return instance != null;
     }
     
     private void initialize() {
@@ -91,10 +102,6 @@ public class HubManager {
 	    IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Can not create config section. " + world.getName() + " already exists!", true, false, e);
 	    throw e;
 	}
-    }
-    
-    public static HubManager getManager() {
-	return instance;
     }
     
     public WorldHub getHub(World world) {
