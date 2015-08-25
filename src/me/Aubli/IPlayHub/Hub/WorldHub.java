@@ -37,7 +37,6 @@ public class WorldHub {
     public WorldHub(ConfigurationSection section) throws Exception {
 	this.config = new HubConfig(section);
 	loadConfig();
-	System.out.println(getName() + " is loaded!");
     }
     
     private void loadConfig() {

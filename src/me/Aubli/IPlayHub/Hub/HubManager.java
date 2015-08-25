@@ -48,9 +48,9 @@ public class HubManager {
 	    
 	    for (String world : config.getConfigurationSection("worlds").getKeys(false)) {
 		try {
-		    // Bukkit.broadcastMessage(ChatColor.RED + "worldkey: " + world);
 		    WorldHub worldHub = new WorldHub(config.getConfigurationSection("worlds." + world));
 		    this.hubList.add(worldHub);
+		    IPlayHub.getPluginLogger().log(getClass(), Level.INFO, "Loaded " + worldHub.getName() + " in World " + worldHub.getWorld().getName(), true, false);
 		} catch (WorldNotLoadedException e) {
 		    IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Worldhub in world " + world + " can not be loaded! " + e.getMessage(), true, false, e);
 		} catch (Exception e) {
@@ -65,7 +65,7 @@ public class HubManager {
 	} catch (IOException e) {
 	    IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Error while saving worldfile!", true, false, e);
 	}
-	
+	IPlayHub.getPluginLogger().log(getClass(), Level.FINER, "HubManager finished loading " + this.hubList.size() + " hubs out of " + config.getConfigurationSection("worlds").getKeys(false).size() + " possible", true, true);
     }
     
     public void reloadHubs() {
@@ -77,6 +77,7 @@ public class HubManager {
 	    if (getHub(hubName) == null) {
 		WorldHub hub = new WorldHub(new HubConfig(hubName, world, createSection(world)), spawnLocation.clone());
 		this.hubList.add(hub);
+		IPlayHub.getPluginLogger().log(getClass(), Level.INFO, hubName + " registered in " + world.getName() + "(" + world.getUID().toString() + "). Spawn is at " + spawnLocation.getX() + ":" + spawnLocation.getY() + ":" + spawnLocation.getZ(), true, true);
 		return hub;
 	    } else {
 		Exception e = new HubAlreadyExistsException();
@@ -96,6 +97,7 @@ public class HubManager {
 	if (config.get("worlds." + world.getName()) == null) {
 	    ConfigurationSection section = config.createSection("worlds." + world.getName());
 	    config.save(IPlayHub.getHub().getWorldFile());
+	    IPlayHub.getPluginLogger().log(getClass(), Level.FINER, "Created ConfigurationSection 'worlds." + world.getName() + "'", true, true);
 	    return section;
 	} else {
 	    Exception e = new WorldAlreadyInitializedException();
