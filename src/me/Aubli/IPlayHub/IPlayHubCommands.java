@@ -239,13 +239,13 @@ public class IPlayHubCommands implements CommandExecutor {
 				
 				tpEditBook.setItemMeta(meta);
 				playerSender.getInventory().addItem(tpEditBook);
-				
 			    } else {
 				IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.teleport_does_not_exist, args[1]);
 			    }
 			} else {
 			    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.no_hub_in_world, playerSender.getWorld().getName());
 			}
+			return true;
 		    } else {
 			commandDenied(playerSender);
 			return true;
