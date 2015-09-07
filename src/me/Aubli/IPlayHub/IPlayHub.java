@@ -150,6 +150,8 @@ public class IPlayHub extends JavaPlugin {
 	    e.printStackTrace();
 	}
 	
+	getConfig().options().header("\nThis is the configuration file of IPlayHub.\nEvery configuration option has a detailed description.\nFor Questions or ideas visit https://www.github.com/AlexMl/IPlayHub/\n\n");
+	
 	getConfig().addDefault("config.debugMode", false);
 	getConfig().addDefault("config.logLevel", Level.INFO.intValue());
 	getConfig().addDefault("config.configLoadDelay", 0);
@@ -171,6 +173,7 @@ public class IPlayHub extends JavaPlugin {
 	giveBook = getConfig().getBoolean("config.giveWelcomeBook");
 	
 	getConfig().options().copyDefaults(true);
+	getConfig().options().copyHeader(true);
 	saveConfig();
 	
 	insertComments();
@@ -214,13 +217,15 @@ public class IPlayHub extends JavaPlugin {
     private void insertComments() {
 	File configFile = new File(getDataFolder(), "config.yml");
 	
-	CommentUtil.insertComment(configFile, "debugMode", "Development settings for IplayHub. Set to false for normal use!");
-	CommentUtil.insertComment(configFile, "configLoadDelay", "WorldManager plugins often load worlds only after the server has finished. If IPlayHub is using this worlds the plugin will encounter problems.#You can set a delay (in seconds) to avoid those issues.");
-	CommentUtil.insertComment(configFile, "mainWorld", "The name of the world which is used as 'spawn' world.");
-	CommentUtil.insertComment(configFile, "joinAtHub", "If true, the player will be teleported to the spawn location of the hub from the mainWorld every time he joins the server.");
-	CommentUtil.insertComment(configFile, "shootFireworkAtJoin", "If true, random firework will be shot above the player.");
-	CommentUtil.insertComment(configFile, "welcomeMessage", "Message that the player receives on join!");
-	CommentUtil.insertComment(configFile, "giveWelcomeBook", "If true, the player receives a custom book.#The book can be set in the bookmeta.yml file!");
+	CommentUtil commentUtil = new CommentUtil(configFile);
+	commentUtil.addComment("debugMode", "Development settings for IplayHub. Set to false for normal use!");
+	commentUtil.addComment("configLoadDelay", "WorldManager plugins often load worlds only after the server has finished. If IPlayHub is using this worlds the plugin will encounter problems.#You can set a delay (in seconds) to avoid those issues.");
+	commentUtil.addComment("mainWorld", "The name of the world which is used as 'spawn' world.");
+	commentUtil.addComment("joinAtHub", "If true, the player will be teleported to the spawn location of the hub from the mainWorld every time he joins the server.");
+	commentUtil.addComment("shootFireworkAtJoin", "If true, random firework will be shot above the player.");
+	commentUtil.addComment("welcomeMessage", "Message that the player receives on join!");
+	commentUtil.addComment("giveWelcomeBook", "If true, the player receives a custom book.#The book can be set in the bookmeta.yml file!");
+	commentUtil.writeComments();
     }
     
     private void registerListeners() {
