@@ -110,7 +110,7 @@ public class SignListener implements Listener {
 	    Sign eventSign = (Sign) event.getBlock().getState();
 	    
 	    if (checkPrefix(eventSign.getLine(0))) {
-		if (IPlayHubPermissions.hasPermission(event.getPlayer(), IPlayHubPermissions.Admin)) {
+		if (!IPlayHubPermissions.hasPermission(event.getPlayer(), IPlayHubPermissions.Admin)) {
 		    event.setCancelled(true);
 		    IPlayHubPermissions.deny(event.getPlayer());
 		    return;
