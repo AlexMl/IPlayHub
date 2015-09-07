@@ -27,7 +27,16 @@ public class IPlayHubCommands implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String[] args) {
 	
 	if (!(sender instanceof Player)) {
-	    sender.sendMessage("This commands are only for players!");
+	    if (args.length == 1) {
+		if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
+		    HubManager.getManager().reloadHubs();
+		    IPlayHub.getHub().reloadConfig();
+		    IPlayHub.getHub().loadConfig();
+		    sender.sendMessage(IPlayHubMessages.config_reloaded.getMessage());
+		    return true;
+		}
+	    }
+	    sender.sendMessage(formatHeader("Help") + "\n" + ChatColor.YELLOW + "|" + ChatColor.AQUA + " iplayhub rl\n" + ChatColor.YELLOW + "|" + ChatColor.AQUA + " iplayhub reload");
 	    return true;
 	}
 	
