@@ -7,13 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.swing.text.html.Option;
-
 
 public class CommentUtil {
     
     /**
-     * Use this to add <u>one</u> Comment into the file. For more Comments use {@link #addComment(Option, Comment)}!
+     * Use this to add <u>one</u> Comment into the file. For more Comments use {@link #addComment(option, comment)}!
      * 
      * @param file
      *        The file to write in
