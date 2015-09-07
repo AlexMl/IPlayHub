@@ -65,6 +65,8 @@ public class IPlayHubCommands implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
 		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Admin)) {
 			HubManager.getManager().reloadHubs();
+			IPlayHub.getHub().reloadConfig();
+			IPlayHub.getHub().loadConfig();
 			IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.config_reloaded);
 		    } else {
 			commandDenied(playerSender);

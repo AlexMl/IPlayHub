@@ -141,7 +141,7 @@ public class IPlayHub extends JavaPlugin {
 	return welcomeBook;
     }
     
-    private void loadConfig() {
+    public void loadConfig() {
 	
 	try {
 	    getWorldFile().getParentFile().mkdirs();
