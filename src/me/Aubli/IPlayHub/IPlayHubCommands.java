@@ -186,6 +186,7 @@ public class IPlayHubCommands implements CommandExecutor {
 			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Enabled: " + ChatColor.GREEN + hub.isEnabled());
 			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Spawn: " + ChatColor.GREEN + hub.getSpawnPoint().getLocation().getBlockX() + ChatColor.YELLOW + ", " + ChatColor.GREEN + hub.getSpawnPoint().getLocation().getBlockY() + ChatColor.YELLOW + ", " + ChatColor.GREEN + hub.getSpawnPoint().getLocation().getBlockZ());
 			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Teleporters: " + ChatColor.GREEN + hub.getTeleportPoints().length);
+			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Current Players: " + ChatColor.GREEN + hub.getWorld().getPlayers().size());
 			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Allow Damage: " + ChatColor.GREEN + hub.getConfig().isAllowDamage());
 			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Allow PvP: " + ChatColor.GREEN + hub.getConfig().isPlayerVsPlayer());
 			    playerSender.sendMessage(ChatColor.YELLOW + "| " + ChatColor.AQUA + "Allow hunger: " + ChatColor.GREEN + hub.getConfig().isStarving());
