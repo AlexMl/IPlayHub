@@ -26,6 +26,8 @@ public class HubConfig {
     private boolean starving;			// Enable hunger in world
     private boolean allowDamage;		// Enable Damage in world
     private boolean weatherChanges;		// Enable weather change in world
+    private boolean spawnAnimals;		// Enable animal spawn in world
+    private boolean spawnMonsters;		// Enable monster spawn in world
     
     public HubConfig(String hubName, World world, ConfigurationSection configSection) {
 	
@@ -60,6 +62,8 @@ public class HubConfig {
 	this.starving = false;
 	this.allowDamage = true;
 	this.weatherChanges = true;
+	this.spawnAnimals = true;
+	this.spawnMonsters = true;
     }
     
     private void loadSettings(ConfigurationSection config) {
@@ -71,6 +75,8 @@ public class HubConfig {
 	this.starving = config.getBoolean("settings.hunger");
 	this.allowDamage = config.getBoolean("settings.allowDamage");
 	this.weatherChanges = config.getBoolean("settings.weatherActivity");
+	this.spawnAnimals = config.getBoolean("settings.spawnAnimals");
+	this.spawnMonsters = config.getBoolean("settings.spawnMonsters");
     }
     
     private void saveSettings() {
@@ -84,6 +90,8 @@ public class HubConfig {
 	configSection.set("settings.hunger", isStarving());
 	configSection.set("settings.allowDamage", isPlayerVsPlayer());
 	configSection.set("settings.weatherActivity", isWeatherChanges());
+	configSection.set("settings.spawnAnimals", isSpawnAnimals());
+	configSection.set("settings.spawnMonsters", isSpawnMonsters());
 	
 	try {
 	    configConfiguration.save(IPlayHub.getHub().getWorldFile());
@@ -122,5 +130,13 @@ public class HubConfig {
     
     public boolean isWeatherChanges() {
 	return this.weatherChanges;
+    }
+    
+    public boolean isSpawnAnimals() {
+	return this.spawnAnimals;
+    }
+    
+    public boolean isSpawnMonsters() {
+	return this.spawnMonsters;
     }
 }

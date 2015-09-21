@@ -32,11 +32,13 @@ public class WorldHub {
 	this.hubSpawn = new HubPoint(spawnLoc.clone(), "SPAWN");
 	this.teleportLocations = new ArrayList<HubPoint>();
 	saveConfig();
+	applyWorldSettings();
     }
     
     public WorldHub(ConfigurationSection section) throws Exception {
 	this.config = new HubConfig(section);
 	loadConfig();
+	applyWorldSettings();
     }
     
     private void loadConfig() {
@@ -74,6 +76,10 @@ public class WorldHub {
 	} catch (IOException e) {
 	    IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Error while saving worldconfiguration for hub " + getName() + " in world " + getWorld().getName() + "!", true, false, e);
 	}
+    }
+    
+    private void applyWorldSettings() {
+	getWorld().setSpawnFlags(getConfig().isSpawnMonsters(), getConfig().isSpawnAnimals());
     }
     
     private String getLocationString(HubPoint loc) {
