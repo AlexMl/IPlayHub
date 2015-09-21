@@ -38,6 +38,10 @@ public class GUIListener implements Listener {
 	    
 	    if (event.getSlot() == -999) {
 		eventPlayer.closeInventory();
+		
+		if (invName.equals("Hub Points!")) {
+		    eventPlayer.openInventory(getHubSwitchGUI(eventPlayer));
+		}
 		return;
 	    }
 	    
@@ -47,7 +51,7 @@ public class GUIListener implements Listener {
 			WorldHub hub = HubManager.getManager().getHub(eventItem.getItemMeta().getDisplayName());
 			
 			if (hub != null && hub.isEnabled()) {
-			    Inventory hubInv = Bukkit.createInventory(eventPlayer, (int) (Math.ceil((hub.getTeleportPoints().length + (eventPlayer.hasPermission(hub.getSpawnPoint().getPermNode()) ? 1 : 0)) / 9.0) * 9), IPlayHub.getPluginPrefix() + " Hub Points!");
+			    Inventory hubInv = Bukkit.createInventory(eventPlayer, (int) (Math.ceil((hub.getTeleportPoints().length + (eventPlayer.hasPermission(hub.getSpawnPoint().getPermNode()) ? 1 : 0) + 1) / 9.0) * 9), IPlayHub.getPluginPrefix() + " Hub Points!");
 			    List<String> lore = new ArrayList<String>();
 			    
 			    if (eventPlayer.hasPermission(hub.getSpawnPoint().getPermNode())) {
@@ -74,11 +78,30 @@ public class GUIListener implements Listener {
 				    hubInv.addItem(pointItem);
 				}
 			    }
+			    
+			    ItemStack backSign = new ItemStack(Material.SIGN);
+			    ItemMeta backSignMeta = backSign.getItemMeta();
+			    backSignMeta.setDisplayName(ChatColor.GREEN + "Back");
+			    
+			    lore.clear();
+			    lore.add(ChatColor.LIGHT_PURPLE + "Click to go one inventory up!");
+			    backSignMeta.setLore(lore);
+			    backSign.setItemMeta(backSignMeta);
+			    hubInv.addItem(backSign);
+			    
 			    eventPlayer.closeInventory();
 			    eventPlayer.openInventory(hubInv);
 			    return;
 			}
 		    } else if (invName.equals("Hub Points!")) {
+			
+			eventPlayer.closeInventory();
+			
+			if (eventItem.getType() == Material.SIGN) {
+			    eventPlayer.openInventory(getHubSwitchGUI(eventPlayer));
+			    return;
+			}
+			
 			String hubName = ChatColor.stripColor(eventItem.getItemMeta().getLore().get(0).split("in ")[1].replace("!", ""));
 			
 			WorldHub hub = HubManager.getManager().getHub(hubName);
@@ -86,12 +109,10 @@ public class GUIListener implements Listener {
 			    HubPoint tpPoint = hub.getTeleportPoint(eventItem.getItemMeta().getDisplayName());
 			    if (tpPoint != null) {
 				IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleporting);
-				eventPlayer.closeInventory();
 				hub.teleport(tpPoint, eventPlayer);
 				return;
 			    } else if (eventItem.getItemMeta().getDisplayName().equals("Spawn") && eventItem.getType() == Material.MINECART) {
 				IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleporting);
-				eventPlayer.closeInventory();
 				hub.teleport(hub.getSpawnPoint(), eventPlayer);
 				return;
 			    }
@@ -103,6 +124,25 @@ public class GUIListener implements Listener {
 		}
 	    }
 	}
+    }
+    
+    public static Inventory getHubSwitchGUI(Player holder) {
+	Inventory inv = Bukkit.createInventory(holder, (int) (Math.ceil(HubManager.getManager().getWorldHubs().length / 9.0) * 9), IPlayHub.getPluginPrefix() + " Hubs");
+	
+	for (WorldHub hub : HubManager.getManager().getWorldHubs()) {
+	    if (hub.getApplicableHubPoints(holder).length > 0) {
+		ItemStack hubItem = new ItemStack(Material.CHEST);
+		ItemMeta hubItemMeta = hubItem.getItemMeta();
+		hubItemMeta.setDisplayName(hub.getName());
+		
+		List<String> lore = new ArrayList<String>();
+		lore.add(ChatColor.LIGHT_PURPLE + "Teleport Points of hub " + ChatColor.GOLD + hub.getName() + ChatColor.LIGHT_PURPLE + "!");
+		hubItemMeta.setLore(lore);
+		hubItem.setItemMeta(hubItemMeta);
+		inv.addItem(hubItem);
+	    }
+	}
+	return inv;
     }
     
     @EventHandler

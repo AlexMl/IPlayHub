@@ -1,13 +1,10 @@
 package me.Aubli.IPlayHub;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import me.Aubli.IPlayHub.Hub.HubManager;
 import me.Aubli.IPlayHub.Hub.HubPoint;
 import me.Aubli.IPlayHub.Hub.WorldHub;
+import me.Aubli.IPlayHub.Listener.GUIListener;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -17,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.util.TabText.TabText;
 
 
@@ -104,21 +100,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		
 		if (args[0].equalsIgnoreCase("tp")) {
 		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Teleport)) {
-			Inventory hubInv = Bukkit.createInventory(playerSender, (int) (Math.ceil(HubManager.getManager().getWorldHubs().length / 9.0) * 9), IPlayHub.getPluginPrefix() + " Hubs");
-			
-			for (WorldHub hub : HubManager.getManager().getWorldHubs()) {
-			    if (hub.getApplicableHubPoints(playerSender).length > 0) {
-				ItemStack hubItem = new ItemStack(Material.CHEST);
-				ItemMeta hubItemMeta = hubItem.getItemMeta();
-				hubItemMeta.setDisplayName(hub.getName());
-				
-				List<String> lore = new ArrayList<String>();
-				lore.add(ChatColor.LIGHT_PURPLE + "Teleport Points of hub " + ChatColor.GOLD + hub.getName() + ChatColor.LIGHT_PURPLE + "!");
-				hubItemMeta.setLore(lore);
-				hubItem.setItemMeta(hubItemMeta);
-				hubInv.addItem(hubItem);
-			    }
-			}
+			Inventory hubInv = GUIListener.getHubSwitchGUI(playerSender);
 			playerSender.closeInventory();
 			playerSender.openInventory(hubInv);
 			return true;
