@@ -2,7 +2,9 @@ package me.Aubli.IPlayHub.Hub;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import me.Aubli.IPlayHub.IPlayHub;
@@ -15,6 +17,8 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.util.FileConverter.Converter;
+import org.util.FileConverter.Converter.FileType;
 
 
 public class HubManager {
@@ -40,6 +44,24 @@ public class HubManager {
     }
     
     private void initialize() {
+	// Run the file converter
+	Converter hubConverter = new Converter();
+	String newVersion = "0.0.30";
+	
+	if (hubConverter.needsConvertion(FileType.world_config, newVersion)) {
+	    // Move spawn into own subconfiguration
+	    Map<String, String> changeMap = new HashMap<String, String>();
+	    changeMap.put("location.spawn", "location.spawn.location");
+	    changeMap.put("location.spawnPermission", "location.spawn.permission");
+	    
+	    Map<String, Object> valueMap = new HashMap<String, Object>();
+	    valueMap.put("location.spawn.delay", 0);
+	    
+	    hubConverter.convertPaths(FileType.world_config, newVersion, false, changeMap);
+	    hubConverter.addValues(FileType.world_config, newVersion, true, valueMap);
+	}
+	
+	// Load the hubs from config
 	FileConfiguration config = YamlConfiguration.loadConfiguration(IPlayHub.getHub().getWorldFile());
 	
 	this.hubList = new ArrayList<WorldHub>();
