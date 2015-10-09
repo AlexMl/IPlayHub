@@ -44,7 +44,7 @@ public class WorldHub {
     private void loadConfig() {
 	ConfigurationSection config = getConfig().getConfigSection();
 	
-	this.hubSpawn = new HubPoint(parseLocation(config.getString("location.spawn")), "SPAWN", config.getString("location.spawnPermission"));
+	this.hubSpawn = new HubPoint(parseLocation(config.getString("location.spawn.location")), "SPAWN", config.getInt("location.spawn.delay"), config.getString("location.spawn.permission"));
 	
 	ConfigurationSection tpSection = config.getConfigurationSection("location.teleport");
 	this.teleportLocations = new ArrayList<HubPoint>();
@@ -60,8 +60,9 @@ public class WorldHub {
     public void saveConfig() {
 	FileConfiguration configConfiguration = YamlConfiguration.loadConfiguration(IPlayHub.getHub().getWorldFile());
 	ConfigurationSection configSection = configConfiguration.getConfigurationSection("worlds." + getConfig().getWorld().getName());
-	configSection.set("location.spawn", getLocationString(getSpawnPoint()));
-	configSection.set("location.spawnPermission", getSpawnPoint().getPermNode());
+	configSection.set("location.spawn.location", getLocationString(getSpawnPoint()));
+	configSection.set("location.spawn.permission", getSpawnPoint().getPermNode());
+	configSection.set("location.spawn.delay", getSpawnPoint().getDelay());
 	
 	configSection.set("location.teleport", null);
 	
