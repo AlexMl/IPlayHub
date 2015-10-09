@@ -1,6 +1,6 @@
 package me.Aubli.IPlayHub.HubExceptions;
 
-public class WorldNotLoadedException extends Exception {
+public class WorldNotLoadedException extends HubException {
     
     private static final long serialVersionUID = 1L;
     

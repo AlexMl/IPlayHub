@@ -1,6 +1,6 @@
 package me.Aubli.IPlayHub.HubExceptions;
 
-public class WorldAlreadyInitializedException extends Exception {
+public class WorldAlreadyInitializedException extends HubException {
     
     private static final long serialVersionUID = 1L;
     

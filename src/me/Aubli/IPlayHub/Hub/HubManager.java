@@ -9,6 +9,7 @@ import java.util.logging.Level;
 
 import me.Aubli.IPlayHub.IPlayHub;
 import me.Aubli.IPlayHub.HubExceptions.HubAlreadyExistsException;
+import me.Aubli.IPlayHub.HubExceptions.HubException;
 import me.Aubli.IPlayHub.HubExceptions.WorldAlreadyInitializedException;
 import me.Aubli.IPlayHub.HubExceptions.WorldNotLoadedException;
 
@@ -75,8 +76,11 @@ public class HubManager {
 		    IPlayHub.getPluginLogger().log(getClass(), Level.INFO, "Loaded " + worldHub.getName() + " in World " + worldHub.getWorld().getName(), true, false);
 		} catch (WorldNotLoadedException e) {
 		    IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Worldhub in world " + world + " can not be loaded! " + e.getMessage(), true, false, e);
+		} catch (HubException e) {
+		    IPlayHub.getPluginLogger().log(getClass(), Level.WARNING, "Error while loading hub in world " + world + "! " + e.getMessage(), true, false, e);
 		} catch (Exception e) {
-		    IPlayHub.getPluginLogger().log(getClass(), Level.SEVERE, "Worldhub in world " + world + " can not be loaded! " + e.getMessage(), true, false, e);
+		    IPlayHub.getPluginLogger().log(getClass(), Level.SEVERE, "Worldhub in world " + world + " can not be loaded!", true, false, e);
+		    e.printStackTrace();
 		}
 	    }
 	    

@@ -1,6 +1,6 @@
 package me.Aubli.IPlayHub.HubExceptions;
 
-public class HubAlreadyExistsException extends Exception {
+public class HubAlreadyExistsException extends HubException {
     
     private static final long serialVersionUID = 1L;
     
