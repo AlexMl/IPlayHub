@@ -9,15 +9,14 @@ import java.util.logging.Level;
 import me.Aubli.IPlayHub.IPlayHub;
 import me.Aubli.IPlayHub.IPlayHubMessages;
 import me.Aubli.IPlayHub.IPlayHubPermissions;
+import me.Aubli.IPlayHub.IPlayHubTeleporterTask;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class WorldHub {
@@ -175,13 +174,7 @@ public class WorldHub {
     public boolean teleport(final HubPoint point, final Player player) {
 	if (player.hasPermission(point.getPermNode())) {
 	    if (point != null && isEnabled()) {
-		Bukkit.getScheduler().runTaskLater(IPlayHub.getHub(), new Runnable() {
-		    
-		    @Override
-		    public void run() {
-			player.teleport(point.getLocation(), TeleportCause.PLUGIN);
-		    }
-		}, point.getDelay() * 20L);
+		new IPlayHubTeleporterTask(player, this, point);
 		return true;
 	    } else {
 		IPlayHubMessages.sendMessage(player, IPlayHubMessages.teleport_not_available);
