@@ -19,7 +19,8 @@ public enum IPlayHubMessages {
     teleport_already_exists(ChatColor.RED + "Teleport point " + ChatColor.GOLD + "%s" + ChatColor.RED + " already exists!"),
     teleport_does_not_exist(ChatColor.RED + "Teleport point " + ChatColor.GOLD + "%s" + ChatColor.RED + " does not exist!"),
     teleport_not_available(ChatColor.RED + "Teleport point " + ChatColor.GOLD + "%s" + ChatColor.RED + " is not available!"),
-    teleporting(ChatColor.GREEN + "Teleporting ..."),
+    teleporting(ChatColor.GREEN + "Teleporting to " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " ..."),
+    teleporting_in(ChatColor.GREEN + "Teleporting to " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " in " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " seconds ..."),
     pvp_denied(ChatColor.RED + "PvP is disabled in this region!"),
     config_saved(ChatColor.GREEN + "Configuration saved successfully!"),
     config_reloaded(ChatColor.GREEN + "Configuration successfully reloaded!"), ;

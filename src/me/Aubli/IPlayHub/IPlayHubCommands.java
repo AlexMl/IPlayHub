@@ -238,6 +238,7 @@ public class IPlayHubCommands implements CommandExecutor {
 		}
 		
 		// INFO: world/hub specific
+		// TODO Overhaul
 		if (args[0].equalsIgnoreCase("tp")) {
 		    if (IPlayHubPermissions.hasPermission(playerSender, IPlayHubPermissions.Teleport)) {
 			WorldHub hub = HubManager.getManager().getHub(playerSender.getWorld());
@@ -246,7 +247,7 @@ public class IPlayHubCommands implements CommandExecutor {
 			    HubPoint tpPoint = hub.getTeleportPoint(args[1]);
 			    if (tpPoint != null) {
 				if (playerSender.hasPermission(tpPoint.getPermNode())) {
-				    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.teleporting);
+				    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.teleporting, tpPoint.getName());
 				    hub.teleport(tpPoint, playerSender);
 				} else {
 				    commandDenied(playerSender);
