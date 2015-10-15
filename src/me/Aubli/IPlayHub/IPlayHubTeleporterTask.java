@@ -5,6 +5,7 @@ import me.Aubli.IPlayHub.Hub.WorldHub;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -58,20 +59,25 @@ public class IPlayHubTeleporterTask extends BukkitRunnable {
 	
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
-	    System.out.println(event.getTo().toString());
+	    
 	    if (event.getPlayer().equals(getPlayer())) {
+		double dist = Math.abs(event.getFrom().distanceSquared(event.getTo()));
 		
+		if (dist >= 0.01) {
+		    getPlayer().teleport(event.getFrom(), TeleportCause.PLUGIN);
+		    return;
+		}
 	    }
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOW)
 	public void onInteract(PlayerInteractEvent event) {
-	    System.out.println(event.getClickedBlock().toString());
+	    
 	    if (event.getPlayer().equals(getPlayer())) {
-		
+		event.setCancelled(true);
+		return;
 	    }
 	}
-	
     }
     
 }
