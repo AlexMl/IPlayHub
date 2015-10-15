@@ -247,7 +247,6 @@ public class IPlayHubCommands implements CommandExecutor {
 			    HubPoint tpPoint = hub.getTeleportPoint(args[1]);
 			    if (tpPoint != null) {
 				if (playerSender.hasPermission(tpPoint.getPermNode())) {
-				    IPlayHubMessages.sendMessage(playerSender, IPlayHubMessages.teleporting, tpPoint.getName());
 				    hub.teleport(tpPoint, playerSender);
 				} else {
 				    commandDenied(playerSender);

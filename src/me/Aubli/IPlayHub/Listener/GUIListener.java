@@ -108,11 +108,9 @@ public class GUIListener implements Listener {
 			if (hub != null && hub.isEnabled()) {
 			    HubPoint tpPoint = hub.getTeleportPoint(eventItem.getItemMeta().getDisplayName());
 			    if (tpPoint != null) {
-				IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleporting);
 				hub.teleport(tpPoint, eventPlayer);
 				return;
 			    } else if (eventItem.getItemMeta().getDisplayName().equals("Spawn") && eventItem.getType() == Material.MINECART) {
-				IPlayHubMessages.sendMessage(eventPlayer, IPlayHubMessages.teleporting);
 				hub.teleport(hub.getSpawnPoint(), eventPlayer);
 				return;
 			    }
