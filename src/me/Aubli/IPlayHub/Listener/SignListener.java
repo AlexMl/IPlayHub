@@ -60,6 +60,10 @@ public class SignListener implements Listener {
     @EventHandler
     public void onSignInteract(PlayerInteractEvent event) {
 	
+	if (event.isCancelled()) {
+	    return;
+	}
+	
 	Player eventPlayer = event.getPlayer();
 	
 	if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
